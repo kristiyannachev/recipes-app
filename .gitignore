@@ -17,6 +17,14 @@
 /.next/
 /out/
 
+# env
+.env
+.env.local
+.env.*.local
+
+# prisma
+prisma/dev.db
+
 # production
 /build
 
@@ -39,3 +47,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.npmrc
