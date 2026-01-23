@@ -1,12 +1,22 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 export default async function RecipePage(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
   const { id } = params;
+
+  async function deleteRecipe() {
+    'use server';
+    await prisma.recipe.delete({
+      where: {
+        id: /^\d+$/.test(id) ? parseInt(id) : id,
+      } as any,
+    });
+    redirect('/');
+  }
 
   const recipe = await prisma.recipe.findUnique({
     where: {
@@ -21,10 +31,18 @@ export default async function RecipePage(props: {
 
   return (
     <main className="max-w-2xl mx-auto p-6">
-      <div className="mb-6">
+      <div className="mb-6 flex justify-between items-center">
         <Link href="/" className="text-blue-600 hover:underline">
           &larr; Back to recipes
         </Link>
+        <form action={deleteRecipe}>
+          <button
+            type="submit"
+            className="text-red-600 hover:text-red-800 border border-red-600 hover:bg-red-50 px-3 py-1 rounded transition-colors"
+          >
+            Delete
+          </button>
+        </form>
       </div>
 
       {recipe.imageUrl && (
