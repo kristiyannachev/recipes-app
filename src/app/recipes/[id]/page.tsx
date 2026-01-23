@@ -35,14 +35,22 @@ export default async function RecipePage(props: {
         <Link href="/" className="text-blue-600 hover:underline">
           &larr; Back to recipes
         </Link>
-        <form action={deleteRecipe}>
-          <button
-            type="submit"
-            className="text-red-600 hover:text-red-800 border border-red-600 hover:bg-red-50 px-3 py-1 rounded transition-colors"
+        <div className="flex gap-4">
+          <Link
+            href={`/recipes/${id}/edit`}
+            className="text-indigo-600 hover:text-indigo-800 border border-indigo-600 hover:bg-indigo-50 px-3 py-1 rounded transition-colors"
           >
-            Delete
-          </button>
-        </form>
+            Edit
+          </Link>
+          <form action={deleteRecipe}>
+            <button
+              type="submit"
+              className="text-red-600 hover:text-red-800 border border-red-600 hover:bg-red-50 px-3 py-1 rounded transition-colors"
+            >
+              Delete
+            </button>
+          </form>
+        </div>
       </div>
 
       {recipe.imageUrl && (
