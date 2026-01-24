@@ -1,7 +1,8 @@
 // src/app/recipes/new/page.tsx
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function NewRecipePage() {
@@ -12,8 +13,9 @@ export default function NewRecipePage() {
   const [imageUrl, setImageUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
-  async function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
@@ -35,9 +37,44 @@ export default function NewRecipePage() {
     router.push('/');
   }
 
+  async function handleImageUpload(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError(null);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Image upload failed');
+      }
+
+      const data = await res.json();
+      setImageUrl(data.url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+    } finally {
+      setUploading(false);
+    }
+  }
+
   return (
     <main className="max-w-2xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">New Recipe</h1>
+      <div className="mb-6">
+        <Link href="/" className="text-blue-600 hover:underline">
+          &larr; Back to recipes
+        </Link>
+      </div>
+      <h1 className="text-3xl font-bold mb-6">New Recipe</h1>
 
       {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
 
@@ -45,9 +82,21 @@ export default function NewRecipePage() {
         <input className="w-full border rounded p-2" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
         <textarea className="w-full border rounded p-2 h-32" placeholder="Ingredients (one per line)" value={ingredients} onChange={(e) => setIngredients(e.target.value)} />
         <textarea className="w-full border rounded p-2 h-40" placeholder="Steps" value={steps} onChange={(e) => setSteps(e.target.value)} />
-        <textarea className="w-full border rounded p-2" placeholder="Image URL" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
+        <div>
+          <label className="block text-sm font-medium text-gray-400 mb-1">
+            Image
+          </label>
+          <input
+            type="file"
+            onChange={handleImageUpload}
+            accept="image/*"
+            className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+          />
+          {uploading && <p className="mt-2 text-sm text-gray-500">Uploading...</p>}
+          {imageUrl && <img src={imageUrl} alt="Preview" className="mt-4 w-full h-auto rounded-lg object-cover" />}
+        </div>
         <div className="flex items-center gap-3">
-          <button className="px-4 py-2 rounded bg-blue-600 text-white" disabled={loading}>
+          <button className="px-4 py-2 rounded bg-blue-600 text-white" disabled={loading || uploading}>
             {loading ? 'Creating…' : 'Create'}
           </button>
         </div>
