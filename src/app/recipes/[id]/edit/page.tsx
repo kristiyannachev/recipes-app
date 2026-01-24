@@ -52,12 +52,12 @@ export default async function EditRecipePage(props: {
       <h1 className="text-3xl font-bold mb-6">Edit "{recipe.title}"</h1>
       <form
         action={updateRecipe}
-        className="space-y-6"
+        className="space-y-4"
       >
         <div>
           <label
             htmlFor="title"
-            className="block text-m font-bold mb-6"
+            className="block text-m font-bold mb-1"
           >
             Title
           </label>
@@ -67,13 +67,13 @@ export default async function EditRecipePage(props: {
             id="title"
             defaultValue={recipe.title}
             required
-            className="mt-1 block w-full rounded-md border-gray-900 shadow-m focus:border-indigo-500 focus:ring-indigo-500 sm:text-m text-gray-400"
+            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
           />
         </div>
         <div>
           <label
             htmlFor="description"
-            className="block text-m font-bold mb-6"
+            className="block text-m font-bold mb-1"
           >
             Description
           </label>
@@ -82,13 +82,13 @@ export default async function EditRecipePage(props: {
             id="description"
             defaultValue={recipe.description || ''}
             rows={3}
-            className="mt-1 block w-full rounded-md border-gray-900 shadow-m focus:border-indigo-500 focus:ring-indigo-500 sm:text-m text-gray-400"
+            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
           />
         </div>
         <div>
           <label
             htmlFor="imageUrl"
-            className="block text-m font-bold mb-6"
+            className="block text-m font-bold mb-1"
           >
             Image URL
           </label>
@@ -97,13 +97,13 @@ export default async function EditRecipePage(props: {
             name="imageUrl"
             id="imageUrl"
             defaultValue={recipe.imageUrl || ''}
-            className="mt-1 block w-full rounded-md border-gray-900 shadow-m focus:border-indigo-500 focus:ring-indigo-500 sm:text-m text-gray-400"
+            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
           />
         </div>
         <div>
           <label
             htmlFor="ingredients"
-            className="block text-m font-bold mb-6"
+            className="block text-m font-bold mb-1"
           >
             Ingredients (one per line)
           </label>
@@ -113,13 +113,13 @@ export default async function EditRecipePage(props: {
             defaultValue={recipe.ingredients}
             required
             rows={8}
-            className="mt-1 block w-full rounded-md border-gray-900 shadow-m focus:border-indigo-500 focus:ring-indigo-500 sm:text-m text-gray-400"
+            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
           />
         </div>
         <div>
           <label
             htmlFor="steps"
-            className="block text-m font-bold mb-6"
+            className="block text-m font-bold mb-1"
           >
             Instructions (one per line)
           </label>
@@ -129,7 +129,7 @@ export default async function EditRecipePage(props: {
             defaultValue={recipe.steps}
             required
             rows={10}
-            className="mt-1 block w-full rounded-md border-gray-900 shadow-m focus:border-indigo-500 focus:ring-indigo-500 sm:text-m text-gray-400"
+            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
           />
         </div>
         <div className="flex justify-end gap-4">
