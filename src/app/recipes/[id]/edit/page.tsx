@@ -2,6 +2,9 @@ import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
+import { join } from 'path';
+import { writeFile, mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
 
 export default async function EditRecipePage(props: {
   params: Promise<{ id: string }>;
@@ -22,12 +25,28 @@ export default async function EditRecipePage(props: {
   async function updateRecipe(formData: FormData) {
     'use server';
 
+    const imageFile = formData.get('image') as File | null;
+    let imageUrl = formData.get('existingImageUrl') as string;
+
+    if (imageFile && imageFile.size > 0) {
+      const buffer = Buffer.from(await imageFile.arrayBuffer());
+      const uploadDir = join(process.cwd(), 'public/uploads');
+
+      if (!existsSync(uploadDir)) {
+        await mkdir(uploadDir, { recursive: true });
+      }
+
+      const filename = `${Date.now()}-${imageFile.name.replace(/\s/g, '_')}`;
+      await writeFile(join(uploadDir, filename), buffer);
+      imageUrl = `/uploads/${filename}`;
+    }
+
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       ingredients: formData.get('ingredients') as string,
       steps: formData.get('steps') as string,
-      imageUrl: formData.get('imageUrl') as string,
+      imageUrl: imageUrl,
     };
 
     await prisma.recipe.update({
@@ -87,17 +106,27 @@ export default async function EditRecipePage(props: {
         </div>
         <div>
           <label
-            htmlFor="imageUrl"
+            htmlFor="image"
             className="block text-m font-bold mb-1"
           >
-            Image URL
+            Image
           </label>
           <input
-            type="url"
-            name="imageUrl"
-            id="imageUrl"
-            defaultValue={recipe.imageUrl || ''}
-            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
+            type="hidden"
+            name="existingImageUrl"
+            value={recipe.imageUrl || ''}
+          />
+          {recipe.imageUrl && (
+            <div className="mb-4">
+              <img src={recipe.imageUrl} alt="Current recipe" className="w-32 h-32 object-cover rounded-lg" />
+            </div>
+          )}
+          <input
+            type="file"
+            name="image"
+            id="image"
+            accept="image/*"
+            className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
           />
         </div>
         <div>
