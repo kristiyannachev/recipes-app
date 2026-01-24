@@ -76,7 +76,7 @@ export default async function EditRecipePage(props: {
         <div>
           <label
             htmlFor="title"
-            className="block text-m font-bold mb-1"
+            className="block text-sm font-medium text-gray-400 mb-1"
           >
             Title
           </label>
@@ -86,13 +86,13 @@ export default async function EditRecipePage(props: {
             id="title"
             defaultValue={recipe.title}
             required
-            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
+            className="w-full border rounded p-2"
           />
         </div>
         <div>
           <label
             htmlFor="description"
-            className="block text-m font-bold mb-1"
+            className="block text-sm font-medium text-gray-400 mb-1"
           >
             Description
           </label>
@@ -101,13 +101,13 @@ export default async function EditRecipePage(props: {
             id="description"
             defaultValue={recipe.description || ''}
             rows={3}
-            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
+            className="w-full border rounded p-2"
           />
         </div>
         <div>
           <label
             htmlFor="image"
-            className="block text-m font-bold mb-1"
+            className="block text-sm font-medium text-gray-400 mb-1"
           >
             Image
           </label>
@@ -132,7 +132,7 @@ export default async function EditRecipePage(props: {
         <div>
           <label
             htmlFor="ingredients"
-            className="block text-m font-bold mb-1"
+            className="block text-sm font-medium text-gray-400 mb-1"
           >
             Ingredients (one per line)
           </label>
@@ -142,13 +142,13 @@ export default async function EditRecipePage(props: {
             defaultValue={recipe.ingredients}
             required
             rows={8}
-            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
+            className="w-full border rounded p-2 h-32"
           />
         </div>
         <div>
           <label
             htmlFor="steps"
-            className="block text-m font-bold mb-1"
+            className="block text-sm font-medium text-gray-400 mb-1"
           >
             Instructions (one per line)
           </label>
@@ -158,7 +158,7 @@ export default async function EditRecipePage(props: {
             defaultValue={recipe.steps}
             required
             rows={10}
-            className="mt-1 block w-full rounded-md border border-white bg-transparent shadow-sm focus:border-white focus:ring-indigo-500 sm:text-sm text-gray-400"
+            className="w-full border rounded p-2 h-40"
           />
         </div>
         <div className="flex justify-end gap-4">
