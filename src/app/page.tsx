@@ -9,7 +9,7 @@ export default async function Home() {
   return (
     <main className="max-w-2xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">My Recipes</h1>
+        <h1 className="text-2xl font-bold">Kris' Recipes</h1>
         <Link
           href="/recipes/new"
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
