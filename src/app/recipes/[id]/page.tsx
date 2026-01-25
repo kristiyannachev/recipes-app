@@ -67,9 +67,14 @@ export default async function RecipePage(props: {
       {recipe.description && (
         <p className="text-gray-600 mb-6 italic">{recipe.description}</p>
       )}
-      {recipe.cookMinutes && (
-        <p className="text-gray-600 mb-6"><strong>Cook Time:</strong> {recipe.cookMinutes} minutes</p>
-      )}
+      <div className="flex gap-4 mb-6 text-gray-600">
+        {recipe.cookMinutes && (
+          <p><strong>Cook Time:</strong> {recipe.cookMinutes} minutes</p>
+        )}
+        {(recipe as any).category && (
+          <p><strong>Category:</strong> {(recipe as any).category}</p>
+        )}
+      </div>
 
       <div className="space-y-6">
         <section>

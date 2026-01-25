@@ -12,7 +12,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { title, description, ingredients, steps, prepMinutes, imageUrl } = body;
+    const { title, description, ingredients, steps, cookMinutes, imageUrl, category } = body;
 
     if (!title || !ingredients || !steps) {
       return NextResponse.json({ error: 'title, ingredients, and steps required' }, { status: 400 });
@@ -24,8 +24,9 @@ export async function POST(req: Request) {
         description: description ?? null,
         ingredients,
         steps,
-        prepMinutes: prepMinutes ? Number(prepMinutes) : null,
+        cookMinutes: cookMinutes ? Number(cookMinutes) : null,
         imageUrl: imageUrl ?? null,
+        category: category ?? null,
       },
     });
 

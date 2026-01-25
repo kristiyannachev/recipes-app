@@ -6,6 +6,22 @@ import { join } from 'path';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 
+const categories = [
+  'Breakfast',
+  'Soups',
+  'Chicken',
+  'Pork',
+  'Veal',
+  'Fish & Seafood',
+  'Other Meat',
+  'Vegetarian',
+  'Cakes',
+  'Desserts',
+  'Drinks',
+  'Sauces',
+  'Others',
+];
+
 export default async function EditRecipePage(props: {
   params: Promise<{ id: string }>;
 }) {
@@ -47,6 +63,7 @@ export default async function EditRecipePage(props: {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
       cookMinutes: rawCookMinutes ? parseInt(rawCookMinutes) : null,
+      category: formData.get('category') as string,
       ingredients: formData.get('ingredients') as string,
       steps: formData.get('steps') as string,
       imageUrl: imageUrl,
@@ -107,20 +124,41 @@ export default async function EditRecipePage(props: {
             className="w-full border rounded p-2"
           />
         </div>
-        <div>
-          <label
-            htmlFor="cookMinutes"
-            className="block text-sm font-medium text-gray-400 mb-1"
-          >
-            Cook Time (minutes)
-          </label>
-          <input
-            type="number"
-            name="cookMinutes"
-            id="cookMinutes"
-            defaultValue={recipe.cookMinutes || ''}
-            className="w-full border rounded p-2"
-          />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              htmlFor="cookMinutes"
+              className="block text-sm font-medium text-gray-400 mb-1"
+            >
+              Cook Time (minutes)
+            </label>
+            <input
+              type="number"
+              name="cookMinutes"
+              id="cookMinutes"
+              defaultValue={recipe.cookMinutes || ''}
+              className="w-full border rounded p-2"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="category"
+              className="block text-sm font-medium text-gray-400 mb-1"
+            >
+              Category
+            </label>
+            <select
+              name="category"
+              id="category"
+              defaultValue={(recipe as any).category || ''}
+              className="w-full border rounded p-2 bg-white"
+            >
+              <option value="">Select Category</option>
+              {categories.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
         </div>
         <div>
           <label

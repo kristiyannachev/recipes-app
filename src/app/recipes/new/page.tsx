@@ -5,10 +5,27 @@ import Link from 'next/link';
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 
+const categories = [
+  'Breakfast',
+  'Soups',
+  'Chicken',
+  'Pork',
+  'Veal',
+  'Fish & Seafood',
+  'Other Meat',
+  'Vegetarian',
+  'Cakes',
+  'Desserts',
+  'Drinks',
+  'Sauces',
+  'Others',
+];
+
 export default function NewRecipePage() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [cookMinutes, setCookMinutes] = useState('');
+  const [category, setCategory] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [steps, setSteps] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -24,7 +41,15 @@ export default function NewRecipePage() {
     const res = await fetch('/api/recipes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, description: '', cookMinutes: cookMinutes ? parseInt(cookMinutes) : null, ingredients, steps, imageUrl }),
+      body: JSON.stringify({
+        title,
+        description: '',
+        cookMinutes: cookMinutes ? parseInt(cookMinutes) : null,
+        category,
+        ingredients,
+        steps,
+        imageUrl,
+      }),
     });
 
     setLoading(false);
@@ -81,7 +106,19 @@ export default function NewRecipePage() {
 
       <form onSubmit={onSubmit} className="space-y-4">
         <input className="w-full border rounded p-2" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <input type="number" className="w-full border rounded p-2" placeholder="Cook Time (minutes)" value={cookMinutes} onChange={(e) => setCookMinutes(e.target.value)} />
+        <div className="grid grid-cols-2 gap-4">
+          <input type="number" className="w-full border rounded p-2" placeholder="Cook Time (minutes)" value={cookMinutes} onChange={(e) => setCookMinutes(e.target.value)} />
+          <select
+            className="w-full border rounded p-2 bg-white"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">Select Category</option>
+            {categories.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
         <textarea className="w-full border rounded p-2 h-32" placeholder="Ingredients (one per line)" value={ingredients} onChange={(e) => setIngredients(e.target.value)} />
         <textarea className="w-full border rounded p-2 h-40" placeholder="Steps" value={steps} onChange={(e) => setSteps(e.target.value)} />
         <div>
