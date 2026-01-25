@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 export default function NewRecipePage() {
   const router = useRouter();
   const [title, setTitle] = useState('');
+  const [cookMinutes, setCookMinutes] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [steps, setSteps] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -23,7 +24,7 @@ export default function NewRecipePage() {
     const res = await fetch('/api/recipes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, description: '', ingredients, steps, imageUrl }),
+      body: JSON.stringify({ title, description: '', cookMinutes: cookMinutes ? parseInt(cookMinutes) : null, ingredients, steps, imageUrl }),
     });
 
     setLoading(false);
@@ -80,6 +81,7 @@ export default function NewRecipePage() {
 
       <form onSubmit={onSubmit} className="space-y-4">
         <input className="w-full border rounded p-2" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input type="number" className="w-full border rounded p-2" placeholder="Cook Time (minutes)" value={cookMinutes} onChange={(e) => setCookMinutes(e.target.value)} />
         <textarea className="w-full border rounded p-2 h-32" placeholder="Ingredients (one per line)" value={ingredients} onChange={(e) => setIngredients(e.target.value)} />
         <textarea className="w-full border rounded p-2 h-40" placeholder="Steps" value={steps} onChange={(e) => setSteps(e.target.value)} />
         <div>

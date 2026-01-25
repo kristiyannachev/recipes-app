@@ -13,7 +13,7 @@ model Recipe {
   description String?
   ingredients String   // newline-separated list for MVP
   steps       String
-  prepMinutes Int?
+  cookMinutes Int?
   imageUrl    String?
   createdAt   DateTime @default(now())
 }

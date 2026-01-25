@@ -41,9 +41,12 @@ export default async function EditRecipePage(props: {
       imageUrl = `/uploads/${filename}`;
     }
 
+    const rawCookMinutes = formData.get('cookMinutes') as string;
+
     const data = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
+      cookMinutes: rawCookMinutes ? parseInt(rawCookMinutes) : null,
       ingredients: formData.get('ingredients') as string,
       steps: formData.get('steps') as string,
       imageUrl: imageUrl,
@@ -101,6 +104,21 @@ export default async function EditRecipePage(props: {
             id="description"
             defaultValue={recipe.description || ''}
             rows={3}
+            className="w-full border rounded p-2"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="cookMinutes"
+            className="block text-sm font-medium text-gray-400 mb-1"
+          >
+            Cook Time (minutes)
+          </label>
+          <input
+            type="number"
+            name="cookMinutes"
+            id="cookMinutes"
+            defaultValue={recipe.cookMinutes || ''}
             className="w-full border rounded p-2"
           />
         </div>
