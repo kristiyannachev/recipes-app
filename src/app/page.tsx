@@ -8,7 +8,7 @@ export default async function Home() {
   });
 
   return (
-    <main className="max-w-2xl mx-auto p-6">
+    <main className="max-w-7xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Kris' Recipes</h1>
         <Link

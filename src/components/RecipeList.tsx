@@ -36,28 +36,34 @@ export default function RecipeList({ recipes }: RecipeListProps) {
         onSelectCategory={setSelectedCategory}
       />
 
-      <div className="grid gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {filteredRecipes.map((recipe) => (
           <Link
             key={recipe.id}
             href={`/recipes/${recipe.id}`}
-            className="flex justify-between items-start p-4 border rounded hover:border-blue-500 transition"
+            className="flex flex-col border rounded-lg hover:border-blue-500 transition overflow-hidden hover:shadow-md bg-white"
           >
-            <div>
-              <h2 className="text-xl font-semibold">{recipe.title}</h2>
-              {recipe.description && (
-                <p className="text-gray-600 mt-1">{recipe.description}</p>
-              )}
-            </div>
-            {recipe.imageUrl && (
-              <div className="relative w-24 h-24 ml-4 flex-shrink-0 overflow-hidden rounded">
+            <div className="aspect-square w-full relative bg-gray-100">
+              {recipe.imageUrl ? (
                 <img
                   src={recipe.imageUrl}
                   alt={recipe.title}
                   className="object-cover w-full h-full"
                 />
-              </div>
-            )}
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-300 text-4xl">
+                  🍽️
+                </div>
+              )}
+            </div>
+            <div className="p-3">
+              <h2 className="font-semibold text-gray-900 truncate" title={recipe.title}>
+                {recipe.title}
+              </h2>
+              {recipe.category && (
+                <p className="text-xs text-gray-500 mt-1">{recipe.category}</p>
+              )}
+            </div>
           </Link>
         ))}
         {filteredRecipes.length === 0 && (
