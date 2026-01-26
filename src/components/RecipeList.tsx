@@ -11,14 +11,26 @@ interface RecipeListProps {
 
 export default function RecipeList({ recipes }: RecipeListProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredRecipes =
-    selectedCategory === null
-      ? recipes
-      : recipes.filter((recipe) => recipe.category === selectedCategory);
+  const filteredRecipes = recipes.filter((recipe) => {
+    const matchesCategory = selectedCategory === null || recipe.category === selectedCategory;
+    const matchesSearch = recipe.title.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <>
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Search recipes..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full p-2 border rounded-lg"
+        />
+      </div>
+
       <CategoryFilter
         selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
@@ -50,7 +62,7 @@ export default function RecipeList({ recipes }: RecipeListProps) {
         ))}
         {filteredRecipes.length === 0 && (
           <p className="text-gray-500 text-center py-10">
-            No recipes found for this category.
+            No recipes found.
           </p>
         )}
       </div>
