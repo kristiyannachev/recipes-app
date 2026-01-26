@@ -81,7 +81,7 @@ export default function NewRecipePage() {
   return (
     <main className="max-w-2xl mx-auto p-6">
       <div className="mb-6">
-        <Link href="/" className="text-blue-600 hover:underline">
+        <Link href="/" className="text-green-600 hover:underline">
           &larr; Back to recipes
         </Link>
       </div>
@@ -114,13 +114,13 @@ export default function NewRecipePage() {
             type="file"
             onChange={handleImageUpload}
             accept="image/*"
-            className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+            className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100"
           />
           {uploading && <p className="mt-2 text-sm text-gray-500">Uploading...</p>}
           {imageUrl && <img src={imageUrl} alt="Preview" className="mt-4 w-full h-auto rounded-lg object-cover" />}
         </div>
         <div className="flex items-center gap-3">
-          <button className="px-4 py-2 rounded bg-blue-600 text-white" disabled={loading || uploading}>
+          <button className="px-4 py-2 rounded bg-orange-600 text-white hover:bg-orange-700 transition-colors" disabled={loading || uploading}>
             {loading ? 'Creating…' : 'Create'}
           </button>
         </div>

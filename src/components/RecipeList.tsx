@@ -21,13 +21,13 @@ export default function RecipeList({ recipes }: RecipeListProps) {
 
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-8">
         <input
           type="text"
           placeholder="Search recipes..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-2 border rounded-lg"
+          className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all bg-white text-lg"
         />
       </div>
 
@@ -41,27 +41,30 @@ export default function RecipeList({ recipes }: RecipeListProps) {
           <Link
             key={recipe.id}
             href={`/recipes/${recipe.id}`}
-            className="flex flex-col border rounded-lg hover:border-blue-500 transition overflow-hidden hover:shadow-md bg-white"
+            className="flex flex-col border border-stone-200 rounded-2xl hover:border-orange-300 transition-all duration-300 overflow-hidden hover:shadow-xl bg-white group hover:-translate-y-1"
           >
-            <div className="aspect-square w-full relative bg-gray-100">
+            <div className="aspect-square w-full relative bg-stone-100 overflow-hidden">
               {recipe.imageUrl ? (
                 <img
                   src={recipe.imageUrl}
                   alt={recipe.title}
-                  className="object-cover w-full h-full"
+                  className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-300 text-4xl">
+                <div className="w-full h-full flex items-center justify-center text-stone-300 text-4xl">
                   🍽️
                 </div>
               )}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
             </div>
-            <div className="p-3">
-              <h2 className="font-semibold text-gray-900 truncate" title={recipe.title}>
+            <div className="p-5 bg-white">
+              <h2 className="font-bold text-lg text-stone-800 truncate group-hover:text-orange-600 transition-colors" title={recipe.title}>
                 {recipe.title}
               </h2>
               {recipe.category && (
-                <p className="text-xs text-gray-500 mt-1">{recipe.category}</p>
+                <span className="inline-block mt-3 px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-50 rounded-full border border-emerald-100">
+                  {recipe.category}
+                </span>
               )}
             </div>
           </Link>
