@@ -9,6 +9,7 @@ import { categories } from '../../../constants/categories';
 export default function NewRecipePage() {
   const router = useRouter();
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [cookMinutes, setCookMinutes] = useState('');
   const [category, setCategory] = useState('');
   const [ingredients, setIngredients] = useState('');
@@ -28,7 +29,7 @@ export default function NewRecipePage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         title,
-        description: '',
+        description,
         cookMinutes: cookMinutes ? parseInt(cookMinutes) : null,
         category,
         ingredients,
@@ -94,6 +95,10 @@ export default function NewRecipePage() {
           <label className="block text-sm font-bold text-emerald-700 mb-2">Title</label>
           <input className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all" placeholder="e.g. Grandma's Apple Pie" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
+        <div>
+          <label className="block text-sm font-bold text-emerald-700 mb-2">Description</label>
+          <textarea className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="A short description of the recipe" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -116,15 +121,6 @@ export default function NewRecipePage() {
         </div>
 
         <div>
-          <label className="block text-sm font-bold text-emerald-700 mb-2">Ingredients</label>
-          <textarea className="w-full border border-stone-200 rounded-xl p-3 h-32 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="One ingredient per line" value={ingredients} onChange={(e) => setIngredients(e.target.value)} />
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-emerald-700 mb-2">Steps</label>
-          <textarea className="w-full border border-stone-200 rounded-xl p-3 h-40 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="Describe the cooking process..." value={steps} onChange={(e) => setSteps(e.target.value)} />
-        </div>
-
-        <div>
           <label className="block text-sm font-bold text-emerald-700 mb-2">
             Image
           </label>
@@ -136,6 +132,14 @@ export default function NewRecipePage() {
           />
           {uploading && <p className="mt-2 text-sm text-orange-600 font-medium animate-pulse">Uploading image...</p>}
           {imageUrl && <img src={imageUrl} alt="Preview" className="mt-4 w-full h-64 rounded-xl object-cover shadow-md" />}
+        </div>
+        <div>
+          <label className="block text-sm font-bold text-emerald-700 mb-2">Ingredients</label>
+          <textarea className="w-full border border-stone-200 rounded-xl p-3 h-32 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="One ingredient per line" value={ingredients} onChange={(e) => setIngredients(e.target.value)} />
+        </div>
+        <div>
+          <label className="block text-sm font-bold text-emerald-700 mb-2">Steps</label>
+          <textarea className="w-full border border-stone-200 rounded-xl p-3 h-40 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="Describe the cooking process..." value={steps} onChange={(e) => setSteps(e.target.value)} />
         </div>
         <div className="pt-4">
           <button className="w-full px-6 py-4 rounded-xl bg-orange-400 text-white font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed" disabled={loading || uploading}>
