@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
+import RecipeList from '@/components/RecipeList';
 
 export default async function Home() {
   const recipes = await prisma.recipe.findMany({
@@ -18,36 +19,13 @@ export default async function Home() {
         </Link>
       </div>
 
-      <div className="grid gap-4">
-        {recipes.map((recipe) => (
-          <Link
-            key={recipe.id}
-            href={`/recipes/${recipe.id}`}
-            className="flex justify-between items-start p-4 border rounded hover:border-blue-500 transition"
-          >
-            <div>
-              <h2 className="text-xl font-semibold">{recipe.title}</h2>
-              {recipe.description && (
-                <p className="text-gray-600 mt-1">{recipe.description}</p>
-              )}
-            </div>
-            {recipe.imageUrl && (
-              <div className="relative w-24 h-24 ml-4 flex-shrink-0 overflow-hidden rounded">
-                <img
-                  src={recipe.imageUrl}
-                  alt={recipe.title}
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            )}
-          </Link>
-        ))}
-        {recipes.length === 0 && (
-          <p className="text-gray-500 text-center py-10">
-            No recipes yet. Create one to get started!
-          </p>
-        )}
-      </div>
+      {recipes.length > 0 ? (
+        <RecipeList recipes={recipes} />
+      ) : (
+        <p className="text-gray-500 text-center py-10">
+          No recipes yet. Create one to get started!
+        </p>
+      )}
     </main>
   );
 }

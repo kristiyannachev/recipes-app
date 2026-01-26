@@ -4,22 +4,7 @@
 import Link from 'next/link';
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-
-const categories = [
-  'Breakfast',
-  'Soups',
-  'Chicken',
-  'Pork',
-  'Veal',
-  'Fish & Seafood',
-  'Other Meat',
-  'Vegetarian',
-  'Cakes',
-  'Desserts',
-  'Drinks',
-  'Sauces',
-  'Others',
-];
+import { categories } from '../../../constants/categories';
 
 export default function NewRecipePage() {
   const router = useRouter();
