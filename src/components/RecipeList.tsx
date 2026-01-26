@@ -27,7 +27,7 @@ export default function RecipeList({ recipes }: RecipeListProps) {
           placeholder="Search recipes..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all bg-white text-lg"
+          className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:ring-1 focus:ring-orange-100 outline-none transition-all bg-white text-lg"
         />
       </div>
 
@@ -57,18 +57,18 @@ export default function RecipeList({ recipes }: RecipeListProps) {
               )}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
             </div>
-            <div className="p-5 bg-white flex flex-col flex-grow">
-              <h2 className="font-bold text-lg text-stone-800 truncate group-hover:text-orange-600 transition-colors" title={recipe.title}>
+            <div className="p-5 bg-orange-400 flex flex-col flex-grow">
+              <h2 className="font-bold text-lg text-white truncate group-hover:text-emerald-600 transition-colors" title={recipe.title}>
                 {recipe.title}
               </h2>
               <div className="flex-grow mt-2">
                 <div className="flex justify-between items-start">
-                  <p className="text-sm text-stone-500 line-clamp-2 pr-2">
+                  <p className="text-sm text-white line-clamp-2 pr-2">
                     {recipe.description || ''}
                   </p>
                   {recipe.cookMinutes && (
-                    <div className="flex-shrink-0 flex items-center gap-1 text-sm font-medium text-stone-700">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <div className="flex-shrink-0 flex items-center gap-1 text-sm font-medium text-white">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       <span>{recipe.cookMinutes} min</span>
