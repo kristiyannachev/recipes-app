@@ -13,7 +13,7 @@ export default async function Home() {
         <h1 className="text-4xl font-extrabold text-emerald-700 tracking-tight">Kris' Recipes</h1>
         <Link
           href="/recipes/new"
-          className="bg-orange-500 text-white px-6 py-3 rounded-full font-medium hover:bg-orange-600 transition shadow-sm hover:shadow"
+          className="bg-orange-400 text-white px-6 py-3 rounded-full font-medium hover:bg-orange-600 transition shadow-sm hover:shadow"
         >
           + New Recipe
         </Link>

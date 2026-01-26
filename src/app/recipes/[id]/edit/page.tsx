@@ -88,7 +88,7 @@ export default async function EditRecipePage(props: {
           &larr; Back to recipe
         </Link>
       </div>
-      <h1 className="text-3xl font-bold mb-6">Edit "{recipe.title}"</h1>
+      <h1 className="text-3xl text-emerald-700 font-bold mb-6">Edit "{recipe.title}"</h1>
       <form
         action={updateRecipe}
         className="space-y-4"

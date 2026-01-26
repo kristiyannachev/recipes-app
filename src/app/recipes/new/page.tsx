@@ -85,7 +85,7 @@ export default function NewRecipePage() {
           &larr; Back to recipes
         </Link>
       </div>
-      <h1 className="text-4xl font-extrabold text-stone-800 mb-8">New Recipe</h1>
+      <h1 className="text-4xl font-extrabold text-emerald-700 mb-8">New Recipe</h1>
 
       {error && <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100">{error}</div>}
 
@@ -139,7 +139,7 @@ export default function NewRecipePage() {
           {imageUrl && <img src={imageUrl} alt="Preview" className="mt-4 w-full h-64 rounded-xl object-cover shadow-md" />}
         </div>
         <div className="pt-4">
-          <button className="w-full px-6 py-4 rounded-xl bg-orange-500 text-white font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed" disabled={loading || uploading}>
+          <button className="w-full px-6 py-4 rounded-xl bg-orange-400 text-white font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed" disabled={loading || uploading}>
             {loading ? 'Creating Recipe...' : 'Create Recipe'}
           </button>
         </div>
