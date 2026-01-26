@@ -91,19 +91,19 @@ export default function NewRecipePage() {
 
       <form onSubmit={onSubmit} className="space-y-6 bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
         <div>
-          <label className="block text-sm font-bold text-stone-700 mb-2">Title</label>
-          <input className="w-full border border-stone-200 rounded-xl p-3 focus:ring-4 focus:ring-orange-100 focus:border-orange-500 outline-none transition-all" placeholder="e.g. Grandma's Apple Pie" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <label className="block text-sm font-bold text-emerald-700 mb-2">Title</label>
+          <input className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all" placeholder="e.g. Grandma's Apple Pie" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-bold text-stone-700 mb-2">Cook Time (minutes)</label>
-            <input type="number" className="w-full border border-stone-200 rounded-xl p-3 focus:ring-4 focus:ring-orange-100 focus:border-orange-500 outline-none transition-all" placeholder="e.g. 45" value={cookMinutes} onChange={(e) => setCookMinutes(e.target.value)} />
+            <label className="block text-sm font-bold text-emerald-700 mb-2">Cook Time (minutes)</label>
+            <input type="number" className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="e.g. 45" value={cookMinutes} onChange={(e) => setCookMinutes(e.target.value)} />
           </div>
           <div>
-            <label className="block text-sm font-bold text-stone-700 mb-2">Category</label>
+            <label className="block text-sm font-bold text-emerald-700 mb-2">Category</label>
             <select
-              className="w-full border border-stone-200 rounded-xl p-3 bg-white focus:ring-4 focus:ring-orange-100 focus:border-orange-500 outline-none transition-all"
+              className="w-full border border-stone-200 rounded-xl p-3 bg-white focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
@@ -116,17 +116,16 @@ export default function NewRecipePage() {
         </div>
 
         <div>
-          <label className="block text-sm font-bold text-stone-700 mb-2">Ingredients</label>
-          <textarea className="w-full border border-stone-200 rounded-xl p-3 h-32 focus:ring-4 focus:ring-orange-100 focus:border-orange-500 outline-none transition-all" placeholder="One ingredient per line" value={ingredients} onChange={(e) => setIngredients(e.target.value)} />
+          <label className="block text-sm font-bold text-emerald-700 mb-2">Ingredients</label>
+          <textarea className="w-full border border-stone-200 rounded-xl p-3 h-32 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="One ingredient per line" value={ingredients} onChange={(e) => setIngredients(e.target.value)} />
+        </div>
+        <div>
+          <label className="block text-sm font-bold text-emerald-700 mb-2">Steps</label>
+          <textarea className="w-full border border-stone-200 rounded-xl p-3 h-40 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="Describe the cooking process..." value={steps} onChange={(e) => setSteps(e.target.value)} />
         </div>
 
         <div>
-          <label className="block text-sm font-bold text-stone-700 mb-2">Steps</label>
-          <textarea className="w-full border border-stone-200 rounded-xl p-3 h-40 focus:ring-4 focus:ring-orange-100 focus:border-orange-500 outline-none transition-all" placeholder="Describe the cooking process..." value={steps} onChange={(e) => setSteps(e.target.value)} />
-        </div>
-
-        <div>
-          <label className="block text-sm font-bold text-stone-700 mb-2">
+          <label className="block text-sm font-bold text-emerald-700 mb-2">
             Image
           </label>
           <input

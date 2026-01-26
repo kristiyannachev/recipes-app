@@ -5,22 +5,7 @@ import Link from 'next/link';
 import { join } from 'path';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
-
-const categories = [
-  'Breakfast',
-  'Soups',
-  'Chicken',
-  'Pork',
-  'Veal',
-  'Fish & Seafood',
-  'Other Meat',
-  'Vegetarian',
-  'Cakes',
-  'Desserts',
-  'Drinks',
-  'Sauces',
-  'Others',
-];
+import { categories } from '@/constants/categories';
 
 export default async function EditRecipePage(props: {
   params: Promise<{ id: string }>;
@@ -84,74 +69,63 @@ export default async function EditRecipePage(props: {
   return (
     <main className="max-w-2xl mx-auto p-6">
       <div className="mb-6">
-        <Link href={`/recipes/${id}`} className="text-blue-600 hover:underline">
+        <Link
+          href={`/recipes/${id}`}
+          className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2 transition-colors"
+        >
           &larr; Back to recipe
         </Link>
       </div>
-      <h1 className="text-3xl text-emerald-700 font-bold mb-6">Edit "{recipe.title}"</h1>
+      <h1 className="text-4xl font-extrabold text-emerald-700 mb-8">
+        Edit "{recipe.title}"
+      </h1>
       <form
         action={updateRecipe}
-        className="space-y-4"
+        className="space-y-6 bg-white p-8 rounded-3xl shadow-sm border border-stone-100"
       >
         <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-400 mb-1"
-          >
+          <label className="block text-sm font-bold text-emerald-700 mb-2">
             Title
           </label>
           <input
             type="text"
             name="title"
-            id="title"
             defaultValue={recipe.title}
             required
-            className="w-full border rounded p-2"
+            className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
           />
         </div>
         <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-400 mb-1"
-          >
+          <label className="block text-sm font-bold text-emerald-700 mb-2">
             Description
           </label>
           <textarea
             name="description"
-            id="description"
             defaultValue={recipe.description || ''}
             rows={3}
-            className="w-full border rounded p-2"
+            className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
           />
         </div>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label
-              htmlFor="cookMinutes"
-              className="block text-sm font-medium text-gray-400 mb-1"
-            >
+            <label className="block text-sm font-bold text-emerald-700 mb-2">
               Cook Time (minutes)
             </label>
             <input
               type="number"
               name="cookMinutes"
-              id="cookMinutes"
               defaultValue={recipe.cookMinutes || ''}
-              className="w-full border rounded p-2"
+              className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
             />
           </div>
           <div>
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium text-gray-400 mb-1"
-            >
+            <label className="block text-sm font-bold text-emerald-700 mb-2">
               Category
             </label>
             <select
               name="category"
-              id="category"
               defaultValue={(recipe as any).category || ''}
-              className="w-full border rounded p-2 bg-white"
+              className="w-full border border-stone-200 rounded-xl p-3 bg-white focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
             >
               <option value="">Select Category</option>
               {categories.map((c) => (
@@ -161,10 +135,7 @@ export default async function EditRecipePage(props: {
           </div>
         </div>
         <div>
-          <label
-            htmlFor="image"
-            className="block text-sm font-medium text-gray-400 mb-1"
-          >
+          <label className="block text-sm font-bold text-emerald-700 mb-2">
             Image
           </label>
           <input
@@ -174,59 +145,54 @@ export default async function EditRecipePage(props: {
           />
           {recipe.imageUrl && (
             <div className="mb-4">
-              <img src={recipe.imageUrl} alt="Current recipe" className="w-32 h-32 object-cover rounded-lg" />
+              <img
+                src={recipe.imageUrl}
+                alt="Current recipe"
+                className="w-full h-64 rounded-xl object-cover shadow-md"
+              />
             </div>
           )}
           <input
             type="file"
             name="image"
-            id="image"
             accept="image/*"
-            className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+            className="mt-1 block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 cursor-pointer"
           />
         </div>
         <div>
-          <label
-            htmlFor="ingredients"
-            className="block text-sm font-medium text-gray-400 mb-1"
-          >
+          <label className="block text-sm font-bold text-emerald-700 mb-2">
             Ingredients (one per line)
           </label>
           <textarea
             name="ingredients"
-            id="ingredients"
             defaultValue={recipe.ingredients}
             required
             rows={8}
-            className="w-full border rounded p-2 h-32"
+            className="w-full border border-stone-200 rounded-xl p-3 h-32 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
           />
         </div>
         <div>
-          <label
-            htmlFor="steps"
-            className="block text-sm font-medium text-gray-400 mb-1"
-          >
-            Instructions (one per line)
+          <label className="block text-sm font-bold text-emerald-700 mb-2">
+            Steps
           </label>
           <textarea
             name="steps"
-            id="steps"
             defaultValue={recipe.steps}
             required
             rows={10}
-            className="w-full border rounded p-2 h-40"
+            className="w-full border border-stone-200 rounded-xl p-3 h-40 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
           />
         </div>
-        <div className="flex justify-end gap-4">
+        <div className="pt-4 flex justify-end gap-4">
           <Link
             href={`/recipes/${id}`}
-            className="inline-flex justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className="px-6 py-3 rounded-xl bg-stone-100 text-stone-700 font-bold text-lg hover:bg-stone-200 transition-all"
           >
             Cancel
           </Link>
           <button
             type="submit"
-            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className="px-6 py-3 rounded-xl bg-orange-500 text-white font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
           >
             Save Changes
           </button>
