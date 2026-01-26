@@ -57,14 +57,31 @@ export default function RecipeList({ recipes }: RecipeListProps) {
               )}
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
             </div>
-            <div className="p-5 bg-white">
+            <div className="p-5 bg-white flex flex-col flex-grow">
               <h2 className="font-bold text-lg text-stone-800 truncate group-hover:text-orange-600 transition-colors" title={recipe.title}>
                 {recipe.title}
               </h2>
+              <div className="flex-grow mt-2">
+                <div className="flex justify-between items-start">
+                  <p className="text-sm text-stone-500 line-clamp-2 pr-2">
+                    {recipe.description || ''}
+                  </p>
+                  {recipe.cookMinutes && (
+                    <div className="flex-shrink-0 flex items-center gap-1 text-sm font-medium text-stone-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>{recipe.cookMinutes} min</span>
+                    </div>
+                  )}
+                </div>
+              </div>
               {recipe.category && (
-                <span className="inline-block mt-3 px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-50 rounded-full border border-emerald-100">
-                  {recipe.category}
-                </span>
+                <div className="mt-auto pt-3">
+                  <span className="inline-block px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-50 rounded-full border border-emerald-100">
+                    {recipe.category}
+                  </span>
+                </div>
               )}
             </div>
           </Link>
