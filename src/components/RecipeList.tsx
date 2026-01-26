@@ -27,7 +27,7 @@ export default function RecipeList({ recipes }: RecipeListProps) {
           placeholder="Search recipes..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:ring-1 focus:ring-orange-100 outline-none transition-all bg-white text-lg"
+          className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white text-lg"
         />
       </div>
 
