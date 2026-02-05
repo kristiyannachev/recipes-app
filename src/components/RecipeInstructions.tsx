@@ -37,39 +37,30 @@ export default function RecipeInstructions({ steps }: RecipeInstructionsProps) {
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold text-stone-800 flex items-center gap-2">
           <span className="text-orange-500">📝</span> Instructions
         </h2>
-        {activeStep !== null && (
-          <button
-            onClick={handleCancel}
-            className="text-stone-500 hover:text-stone-800 font-bold px-4 py-2 rounded-full hover:bg-stone-100 transition-colors"
-          >
-            Exit Cooking Mode
-          </button>
-        )}
-      </div>
-
-      <div className="mb-8 sticky top-4 z-10">
-        <button
-          onClick={handleStepClick}
-          className={`w-full md:w-auto px-6 py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 ${
-            activeStep === null
-              ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-              : activeStep < stepList.length - 1
-              ? 'bg-orange-500 text-white hover:bg-orange-600'
-              : 'bg-stone-800 text-white hover:bg-stone-900'
-          }`}
-        >
-          {activeStep === null ? (
-            <>Start Cooking Mode 👨‍🍳</>
-          ) : activeStep < stepList.length - 1 ? (
-            <>Next Step &rarr;</>
-          ) : (
-            <>Finish Cooking 🎉</>
+        <div className="flex items-center gap-2">
+          {activeStep !== null && (
+            <button
+              onClick={handleCancel}
+              className="text-sm text-stone-500 hover:text-stone-800 font-bold px-4 py-2 rounded-full hover:bg-stone-100 transition-colors"
+            >
+              Exit
+            </button>
           )}
-        </button>
+          <button
+            onClick={handleStepClick}
+            className={`px-6 py-3 rounded-xl font-bold text-base transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 ${
+              activeStep === null
+                ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                : 'bg-orange-500 text-white hover:bg-orange-600'
+            }`}
+          >
+            {activeStep === null ? '🧑‍🍳 Start Cooking' : activeStep < stepList.length - 1 ? 'Next Step' : 'Finish'}
+          </button>
+        </div>
       </div>
 
       <ol className="space-y-6 text-lg text-stone-700 relative">
