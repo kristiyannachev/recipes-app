@@ -95,11 +95,11 @@ export default function NewRecipePage() {
       <form onSubmit={onSubmit} className="space-y-6 bg-white p-8 rounded-3xl shadow-sm border border-stone-100">
         <div>
           <label className="block text-sm font-bold text-emerald-700 mb-2">Title</label>
-          <input className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all" placeholder="e.g. Grandma's Apple Pie" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all" placeholder="e.g. Grandma's Apple Pie" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={50} />
         </div>
         <div>
           <label className="block text-sm font-bold text-emerald-700 mb-2">Description</label>
-          <textarea className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="A short description of the recipe" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+          <textarea className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="A short description of the recipe" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} maxLength={50} />
         </div>
         <div>
           <label className="block text-sm font-bold text-emerald-700 mb-2">Source URL</label>
@@ -109,7 +109,7 @@ export default function NewRecipePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-bold text-emerald-700 mb-2">Cook Time (minutes)</label>
-            <input type="number" className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="e.g. 45" value={cookMinutes} onChange={(e) => setCookMinutes(e.target.value)} />
+            <input type="number" className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="e.g. 45" value={cookMinutes} onChange={(e) => setCookMinutes(e.target.value)} min="1" />
           </div>
           <div>
             <label className="block text-sm font-bold text-emerald-700 mb-2">Category</label>

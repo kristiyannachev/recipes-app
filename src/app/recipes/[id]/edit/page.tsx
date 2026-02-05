@@ -94,6 +94,7 @@ export default async function EditRecipePage(props: {
             name="title"
             defaultValue={recipe.title}
             required
+            maxLength={50}
             className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
           />
         </div>
@@ -105,6 +106,7 @@ export default async function EditRecipePage(props: {
             name="description"
             defaultValue={recipe.description || ''}
             rows={3}
+            maxLength={50}
             className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
           />
         </div>
@@ -128,6 +130,7 @@ export default async function EditRecipePage(props: {
               type="number"
               name="cookMinutes"
               defaultValue={recipe.cookMinutes || ''}
+              min="1"
               className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
             />
           </div>
