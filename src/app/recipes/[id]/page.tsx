@@ -51,10 +51,10 @@ export default async function RecipePage(props: {
         {/* Left Column: Content */}
         <div className="space-y-8">
           <div>
-            <h1 className="text-5xl font-extrabold text-stone-800 mb-4 tracking-tight break-words">{recipe.title}</h1>
+            <h1 className="text-5xl font-extrabold text-emerald-700 mb-8 tracking-tight break-words">{recipe.title}</h1>
             
             {recipe.description && (
-              <p className="text-xl text-stone-500 mb-6 leading-relaxed break-words">{recipe.description}</p>
+              <p className="text-xl text-emerald-600 mb-6 leading-relaxed break-words">{recipe.description}</p>
             )}
 
             {(recipe as any).sourceUrl && (
@@ -72,7 +72,7 @@ export default async function RecipePage(props: {
 
             <div className="flex flex-wrap gap-4 text-sm font-bold text-stone-500 uppercase tracking-wider">
               {recipe.cookMinutes && (
-                <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full">
+                <div className="flex items-center gap-2 bg-orange-50 text-orange-500 px-3 py-1 rounded-full">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -93,12 +93,12 @@ export default async function RecipePage(props: {
           <div className="space-y-8">
             <section>
               <h2 className="text-2xl font-bold text-stone-800 mb-4 flex items-center gap-2">
-                <span className="text-orange-500">🥕</span> Ingredients
+                <span className="text-orange-500">🍱</span> Ingredients
               </h2>
               <ul className="space-y-3 text-lg text-stone-700">
                 {recipe.ingredients.split('\n').map((ingredient, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <span className="mt-2 block h-2 w-2 rounded-full bg-emerald-400 flex-shrink-0" />
+                    <span className="mt-2 block h-2 w-2 rounded-full bg-emerald-600 flex-shrink-0" />
                     <span>{ingredient}</span>
                   </li>
                 ))}
@@ -112,7 +112,7 @@ export default async function RecipePage(props: {
               <ol className="space-y-6 text-lg text-stone-700">
                 {recipe.steps.split('\n').map((step, i) => (
                   <li key={i} className="flex gap-4">
-                    <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-orange-100 text-orange-600 font-bold text-sm">
+                    <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-orange-100 text-orange-500 font-bold text-sm">
                       {i + 1}
                     </span>
                     <span className="mt-1">{step}</span>

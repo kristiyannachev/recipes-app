@@ -69,7 +69,7 @@ export default async function EditRecipePage(props: {
   }
 
   return (
-    <main className="max-w-2xl mx-auto p-6">
+    <main className="max-w-6xl mx-auto p-6">
       <div className="mb-6">
         <Link
           href={`/recipes/${id}`}
@@ -83,123 +83,134 @@ export default async function EditRecipePage(props: {
       </h1>
       <form
         action={updateRecipe}
-        className="space-y-6 bg-white p-8 rounded-3xl shadow-sm border border-stone-100"
+        className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100"
       >
-        <div>
-          <label className="block text-sm font-bold text-emerald-700 mb-2">
-            Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            defaultValue={recipe.title}
-            required
-            maxLength={50}
-            className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-emerald-700 mb-2">
-            Description
-          </label>
-          <textarea
-            name="description"
-            defaultValue={recipe.description || ''}
-            rows={3}
-            maxLength={50}
-            className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-emerald-700 mb-2">
-            Source URL
-          </label>
-          <input
-            type="url"
-            name="sourceUrl"
-            defaultValue={(recipe as any).sourceUrl || ''}
-            className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
-          />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-bold text-emerald-700 mb-2">
-              Cook Time (minutes)
-            </label>
-            <input
-              type="number"
-              name="cookMinutes"
-              defaultValue={recipe.cookMinutes || ''}
-              min="1"
-              className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-bold text-emerald-700 mb-2">
-              Category
-            </label>
-            <select
-              name="category"
-              defaultValue={(recipe as any).category || ''}
-              className="w-full border border-stone-200 rounded-xl p-3 bg-white focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
-            >
-              <option value="">Select Category</option>
-              {categories.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-emerald-700 mb-2">
-            Image
-          </label>
-          <input
-            type="hidden"
-            name="existingImageUrl"
-            value={recipe.imageUrl || ''}
-          />
-          {recipe.imageUrl && (
-            <div className="mb-4">
-              <img
-                src={recipe.imageUrl}
-                alt="Current recipe"
-                className="w-full h-64 rounded-xl object-cover shadow-md"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-bold text-emerald-700 mb-2">
+                Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                defaultValue={recipe.title}
+                required
+                maxLength={50}
+                className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
               />
             </div>
-          )}
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            className="mt-1 block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 cursor-pointer"
-          />
+            <div>
+              <label className="block text-sm font-bold text-emerald-700 mb-2">
+                Description
+              </label>
+              <textarea
+                name="description"
+                defaultValue={recipe.description || ''}
+                rows={3}
+                maxLength={50}
+                className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-emerald-700 mb-2">
+                Source URL
+              </label>
+              <input
+                type="url"
+                name="sourceUrl"
+                defaultValue={(recipe as any).sourceUrl || ''}
+                className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-bold text-emerald-700 mb-2">
+                  Cook Time (minutes)
+                </label>
+                <input
+                  type="number"
+                  name="cookMinutes"
+                  defaultValue={recipe.cookMinutes || ''}
+                  min="1"
+                  className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-emerald-700 mb-2">
+                  Category
+                </label>
+                <select
+                  name="category"
+                  defaultValue={(recipe as any).category || ''}
+                  className="w-full border border-stone-200 rounded-xl p-3 bg-white focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-emerald-700 mb-2">
+                Ingredients (one per line)
+              </label>
+              <textarea
+                name="ingredients"
+                defaultValue={recipe.ingredients}
+                required
+                rows={8}
+                className="w-full border border-stone-200 rounded-xl p-3 h-32 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-emerald-700 mb-2">
+                Steps
+              </label>
+              <textarea
+                name="steps"
+                defaultValue={recipe.steps}
+                required
+                rows={10}
+                className="w-full border border-stone-200 rounded-xl p-3 h-40 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="sticky top-8">
+              <label className="block text-sm font-bold text-emerald-700 mb-2">
+                Image
+              </label>
+              <input
+                type="hidden"
+                name="existingImageUrl"
+                value={recipe.imageUrl || ''}
+              />
+              <div className="aspect-square w-full overflow-hidden rounded-3xl shadow-xl bg-stone-100 mb-6">
+                {recipe.imageUrl ? (
+                  <img
+                    src={recipe.imageUrl}
+                    alt="Current recipe"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-stone-300 text-6xl">
+                    🍽️
+                  </div>
+                )}
+              </div>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                className="block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 cursor-pointer"
+              />
+            </div>
+          </div>
         </div>
-        <div>
-          <label className="block text-sm font-bold text-emerald-700 mb-2">
-            Ingredients (one per line)
-          </label>
-          <textarea
-            name="ingredients"
-            defaultValue={recipe.ingredients}
-            required
-            rows={8}
-            className="w-full border border-stone-200 rounded-xl p-3 h-32 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-bold text-emerald-700 mb-2">
-            Steps
-          </label>
-          <textarea
-            name="steps"
-            defaultValue={recipe.steps}
-            required
-            rows={10}
-            className="w-full border border-stone-200 rounded-xl p-3 h-40 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
-          />
-        </div>
-        <div className="pt-4 flex justify-end gap-4">
+        <div className="pt-8 border-t border-stone-100 mt-8 flex justify-end gap-4">
           <Link
             href={`/recipes/${id}`}
             className="px-6 py-3 rounded-xl bg-stone-100 text-stone-700 font-bold text-lg hover:bg-stone-200 transition-all"
