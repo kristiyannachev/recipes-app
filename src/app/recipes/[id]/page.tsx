@@ -51,10 +51,10 @@ export default async function RecipePage(props: {
         {/* Left Column: Content */}
         <div className="space-y-8">
           <div>
-            <h1 className="text-5xl font-extrabold text-stone-800 mb-4 tracking-tight">{recipe.title}</h1>
+            <h1 className="text-5xl font-extrabold text-stone-800 mb-4 tracking-tight break-words">{recipe.title}</h1>
             
             {recipe.description && (
-              <p className="text-xl text-stone-500 mb-6 leading-relaxed">{recipe.description}</p>
+              <p className="text-xl text-stone-500 mb-6 leading-relaxed break-words">{recipe.description}</p>
             )}
 
             {(recipe as any).sourceUrl && (
