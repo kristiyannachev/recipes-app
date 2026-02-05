@@ -63,6 +63,19 @@ export default async function RecipePage(props: {
               <p className="text-xl text-stone-500 mb-6 leading-relaxed">{recipe.description}</p>
             )}
 
+            {(recipe as any).sourceUrl && (
+              <div className="mb-6">
+                <a
+                  href={(recipe as any).sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-600 hover:text-emerald-700 underline decoration-emerald-300 underline-offset-4 transition-colors"
+                >
+                  View Original Recipe Source &rarr;
+                </a>
+              </div>
+            )}
+
             <div className="flex flex-wrap gap-4 text-sm font-bold text-stone-500 uppercase tracking-wider">
               {recipe.cookMinutes && (
                 <div className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full">

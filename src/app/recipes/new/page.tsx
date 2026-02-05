@@ -15,6 +15,7 @@ export default function NewRecipePage() {
   const [ingredients, setIngredients] = useState('');
   const [steps, setSteps] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [sourceUrl, setSourceUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -35,6 +36,7 @@ export default function NewRecipePage() {
         ingredients,
         steps,
         imageUrl,
+        sourceUrl,
       }),
     });
 
@@ -98,6 +100,10 @@ export default function NewRecipePage() {
         <div>
           <label className="block text-sm font-bold text-emerald-700 mb-2">Description</label>
           <textarea className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="A short description of the recipe" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+        </div>
+        <div>
+          <label className="block text-sm font-bold text-emerald-700 mb-2">Source URL</label>
+          <input type="url" className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white" placeholder="https://example.com/recipe" value={sourceUrl} onChange={(e) => setSourceUrl(e.target.value)} />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -43,6 +43,7 @@ export default async function EditRecipePage(props: {
     }
 
     const rawCookMinutes = formData.get('cookMinutes') as string;
+    const sourceUrl = formData.get('sourceUrl') as string;
 
     const data = {
       title: formData.get('title') as string,
@@ -52,6 +53,7 @@ export default async function EditRecipePage(props: {
       ingredients: formData.get('ingredients') as string,
       steps: formData.get('steps') as string,
       imageUrl: imageUrl,
+      sourceUrl: sourceUrl || null,
     };
 
     await prisma.recipe.update({
@@ -104,6 +106,17 @@ export default async function EditRecipePage(props: {
             defaultValue={recipe.description || ''}
             rows={3}
             className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg:white"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-bold text-emerald-700 mb-2">
+            Source URL
+          </label>
+          <input
+            type="url"
+            name="sourceUrl"
+            defaultValue={(recipe as any).sourceUrl || ''}
+            className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
