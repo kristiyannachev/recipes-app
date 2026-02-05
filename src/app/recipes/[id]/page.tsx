@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
+import DeleteRecipeButton from '@/components/DeleteRecipeButton';
 
 export default async function RecipePage(props: {
   params: Promise<{ id: string }>;
@@ -42,14 +43,7 @@ export default async function RecipePage(props: {
           >
             Edit
           </Link>
-          <form action={deleteRecipe}>
-            <button
-              type="submit"
-              className="text-red-600 hover:text-red-800 border border-red-200 hover:bg-red-50 px-4 py-2 rounded-full transition-colors font-medium"
-            >
-              Delete
-            </button>
-          </form>
+          <DeleteRecipeButton deleteAction={deleteRecipe} />
         </div>
       </div>
 
