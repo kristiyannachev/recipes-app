@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import DeleteRecipeButton from '@/components/DeleteRecipeButton';
+import RecipeInstructions from '@/components/RecipeInstructions';
 
 export default async function RecipePage(props: {
   params: Promise<{ id: string }>;
@@ -105,21 +106,7 @@ export default async function RecipePage(props: {
               </ul>
             </section>
 
-            <section>
-              <h2 className="text-2xl font-bold text-stone-800 mb-4 flex items-center gap-2">
-                <span className="text-orange-500">📝</span> Instructions
-              </h2>
-              <ol className="space-y-6 text-lg text-stone-700">
-                {recipe.steps.split('\n').map((step, i) => (
-                  <li key={i} className="flex gap-4">
-                    <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-orange-100 text-orange-500 font-bold text-sm">
-                      {i + 1}
-                    </span>
-                    <span className="mt-1">{step}</span>
-                  </li>
-                ))}
-              </ol>
-            </section>
+            <RecipeInstructions steps={recipe.steps} />
           </div>
         </div>
 
