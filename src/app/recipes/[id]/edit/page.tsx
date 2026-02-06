@@ -6,6 +6,7 @@ import { join } from 'path';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { categories } from '@/constants/categories';
+import ImageUploadPreview from '@/components/ImageUploadPreview';
 
 export default async function EditRecipePage(props: {
   params: Promise<{ id: string }>;
@@ -179,35 +180,7 @@ export default async function EditRecipePage(props: {
           </div>
 
           <div>
-            <div className="sticky top-8">
-              <label className="block text-sm font-bold text-emerald-700 mb-2">
-                Image
-              </label>
-              <input
-                type="hidden"
-                name="existingImageUrl"
-                value={recipe.imageUrl || ''}
-              />
-              <div className="aspect-square w-full overflow-hidden rounded-3xl shadow-xl bg-stone-100 mb-6">
-                {recipe.imageUrl ? (
-                  <img
-                    src={recipe.imageUrl}
-                    alt="Current recipe"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-stone-300 text-6xl">
-                    🍽️
-                  </div>
-                )}
-              </div>
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                className="block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 cursor-pointer"
-              />
-            </div>
+            <ImageUploadPreview initialImageUrl={recipe.imageUrl} />
           </div>
         </div>
         <div className="pt-8 border-t border-stone-100 mt-8 flex justify-end gap-4">
