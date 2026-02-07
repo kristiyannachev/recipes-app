@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import DeleteRecipeButton from '@/components/DeleteRecipeButton';
 import RecipeInstructions from '@/components/RecipeInstructions';
+import AddToShoppingCartButton from '@/components/AddToShoppingCartButton';
 
 export default async function RecipePage(props: {
   params: Promise<{ id: string }>;
@@ -93,9 +94,16 @@ export default async function RecipePage(props: {
 
           <div className="space-y-8">
             <section>
-              <h2 className="text-2xl font-bold text-stone-800 mb-4 flex items-center gap-2">
-                <span className="text-orange-500">🍱</span> Ingredients
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-stone-800 flex items-center gap-2">
+                  <span className="text-orange-500">🍱</span> Ingredients
+                </h2>
+                <AddToShoppingCartButton
+                  recipeId={recipe.id}
+                  title={recipe.title}
+                  ingredients={recipe.ingredients}
+                />
+              </div>
               <ul className="space-y-3 text-lg text-stone-700">
                 {recipe.ingredients.split('\n').map((ingredient, i) => (
                   <li key={i} className="flex items-start gap-3">
