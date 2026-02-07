@@ -42,19 +42,6 @@ export default function CartPage() {
     localStorage.setItem('shoppingCart', JSON.stringify(newCart));
   };
 
-  const toggleAllIngredients = (recipeId: string | number) => {
-    const newCart = cart.map((item) => {
-      if (item.recipeId === recipeId) {
-        const allChecked = item.ingredients.every((i) => i.checked);
-        const newIngredients = item.ingredients.map((i) => ({ ...i, checked: !allChecked }));
-        return { ...item, ingredients: newIngredients };
-      }
-      return item;
-    });
-    setCart(newCart);
-    localStorage.setItem('shoppingCart', JSON.stringify(newCart));
-  };
-
   const clearCart = () => {
     if (confirm('Are you sure you want to clear your cart?')) {
       setCart([]);
@@ -81,18 +68,16 @@ export default function CartPage() {
   return (
     <main className="max-w-4xl mx-auto p-6">
       <div className="flex items-center justify-between mb-8">
+        <Link href="/" className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2 transition-colors">
+          &larr; Back to recipes
+        </Link>
         <h1 className="text-4xl font-extrabold text-emerald-700">Shopping Cart</h1>
-        <div className="flex items-center gap-4">
-          <button
-            onClick={clearCart}
-            className="text-red-600 hover:text-red-800 font-medium px-4 py-2 rounded-full hover:bg-red-50 transition-colors"
-          >
-            Clear Cart
-          </button>
-          <Link href="/" className="text-emerald-600 hover:text-emerald-700 font-medium">
-            &larr; Back to recipes
-          </Link>
-        </div>
+        <button
+          onClick={clearCart}
+          className="text-red-600 hover:text-red-800 font-medium px-4 py-2 rounded-full hover:bg-red-50 transition-colors"
+        >
+          Clear Cart
+        </button>
       </div>
 
       <div className="space-y-8">
@@ -104,20 +89,12 @@ export default function CartPage() {
                   {item.title}
                 </Link>
               </h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => toggleAllIngredients(item.recipeId)}
-                  className="text-emerald-600 hover:text-emerald-800 text-sm font-medium px-3 py-1 rounded-full hover:bg-emerald-50 transition-colors"
-                >
-                  {item.ingredients.every((i) => i.checked) ? 'Deselect All' : 'Select All'}
-                </button>
-                <button
-                  onClick={() => removeFromCart(item.recipeId)}
-                  className="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-1 rounded-full hover:bg-red-50 transition-colors"
-                >
-                  Remove
-                </button>
-              </div>
+              <button
+                onClick={() => removeFromCart(item.recipeId)}
+                className="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-1 rounded-full hover:bg-red-50 transition-colors"
+              >
+                Remove
+              </button>
             </div>
             <ul className="space-y-3">
               {item.ingredients.map((ingredient, index) => (
