@@ -98,16 +98,30 @@ export default function CartPage() {
                 Remove
               </button>
             </div>
-            <ul className="space-y-2 text-stone-700">
+            <ul className="space-y-3">
               {item.ingredients.map((ingredient, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    checked={ingredient.checked}
-                    onChange={() => toggleIngredient(item.recipeId, index)}
-                    className="mt-1.5 h-4 w-4 rounded border-stone-300 text-orange-500 focus:ring-orange-500 cursor-pointer accent-orange-500"
-                  />
-                  <span className={ingredient.checked ? 'line-through text-stone-400' : ''}>{ingredient.name}</span>
+                <li key={index}>
+                  <label
+                    className={`flex items-start gap-3 p-3 rounded-xl border transition-all duration-200 cursor-pointer ${
+                      ingredient.checked
+                        ? 'bg-stone-50 border-stone-100'
+                        : 'bg-white border-stone-200 hover:border-orange-300 hover:shadow-sm'
+                    }`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={ingredient.checked}
+                      onChange={() => toggleIngredient(item.recipeId, index)}
+                      className="mt-1 h-5 w-5 rounded-md border-stone-300 text-orange-500 focus:ring-orange-500 cursor-pointer accent-orange-500 shrink-0"
+                    />
+                    <span
+                      className={`text-lg leading-snug ${
+                        ingredient.checked ? 'line-through text-stone-400' : 'text-stone-700'
+                      }`}
+                    >
+                      {ingredient.name}
+                    </span>
+                  </label>
                 </li>
               ))}
             </ul>
