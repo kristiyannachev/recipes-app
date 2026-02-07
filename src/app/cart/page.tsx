@@ -52,7 +52,7 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
-      <main className="max-w-4xl mx-auto p-6 text-center">
+      <main className="max-w-3xl mx-auto p-6 text-center">
         <h1 className="text-4xl font-extrabold text-emerald-700 mb-8">Shopping Cart</h1>
         <p className="text-xl text-stone-600 mb-8">Your cart is empty.</p>
         <Link
@@ -66,7 +66,7 @@ export default function CartPage() {
   }
 
   return (
-    <main className="max-w-4xl mx-auto p-6">
+    <main className="max-w-3xl mx-auto p-6">
       <div className="flex items-center justify-between mb-8">
         <Link href="/" className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2 transition-colors">
           &larr; Back to recipes
