@@ -6,7 +6,7 @@ import Link from 'next/link';
 interface CartItem {
   recipeId: string | number;
   title: string;
-  ingredients: string[];
+  ingredients: { name: string; checked: boolean }[];
 }
 
 export default function CartPage() {
@@ -14,7 +14,12 @@ export default function CartPage() {
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('shoppingCart') || '[]');
-    setCart(storedCart);
+    setCart(storedCart.map((item: any) => ({
+      ...item,
+      ingredients: item.ingredients.map((ing: any) => 
+        typeof ing === 'string' ? { name: ing, checked: false } : ing
+      )
+    })));
   }, []);
 
   const removeFromCart = (recipeId: string | number) => {
@@ -22,6 +27,19 @@ export default function CartPage() {
     setCart(newCart);
     localStorage.setItem('shoppingCart', JSON.stringify(newCart));
     window.dispatchEvent(new Event('storage'));
+  };
+
+  const toggleIngredient = (recipeId: string | number, index: number) => {
+    const newCart = cart.map((item) => {
+      if (item.recipeId === recipeId) {
+        const newIngredients = [...item.ingredients];
+        newIngredients[index] = { ...newIngredients[index], checked: !newIngredients[index].checked };
+        return { ...item, ingredients: newIngredients };
+      }
+      return item;
+    });
+    setCart(newCart);
+    localStorage.setItem('shoppingCart', JSON.stringify(newCart));
   };
 
   if (cart.length === 0) {
@@ -67,8 +85,13 @@ export default function CartPage() {
             <ul className="space-y-2 text-stone-700">
               {item.ingredients.map((ingredient, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <span className="mt-2 block h-1.5 w-1.5 rounded-full bg-orange-400 flex-shrink-0" />
-                  <span>{ingredient}</span>
+                  <input
+                    type="checkbox"
+                    checked={ingredient.checked}
+                    onChange={() => toggleIngredient(item.recipeId, index)}
+                    className="mt-1.5 h-4 w-4 rounded border-stone-300 text-orange-500 focus:ring-orange-500 cursor-pointer accent-orange-500"
+                  />
+                  <span className={ingredient.checked ? 'line-through text-stone-400' : ''}>{ingredient.name}</span>
                 </li>
               ))}
             </ul>
