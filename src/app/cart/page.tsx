@@ -42,6 +42,14 @@ export default function CartPage() {
     localStorage.setItem('shoppingCart', JSON.stringify(newCart));
   };
 
+  const clearCart = () => {
+    if (confirm('Are you sure you want to clear your cart?')) {
+      setCart([]);
+      localStorage.setItem('shoppingCart', '[]');
+      window.dispatchEvent(new Event('storage'));
+    }
+  };
+
   if (cart.length === 0) {
     return (
       <main className="max-w-4xl mx-auto p-6 text-center">
@@ -61,9 +69,17 @@ export default function CartPage() {
     <main className="max-w-4xl mx-auto p-6">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-4xl font-extrabold text-emerald-700">Shopping Cart</h1>
-        <Link href="/" className="text-emerald-600 hover:text-emerald-700 font-medium">
-          &larr; Back to recipes
-        </Link>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={clearCart}
+            className="text-red-600 hover:text-red-800 font-medium px-4 py-2 rounded-full hover:bg-red-50 transition-colors"
+          >
+            Clear Cart
+          </button>
+          <Link href="/" className="text-emerald-600 hover:text-emerald-700 font-medium">
+            &larr; Back to recipes
+          </Link>
+        </div>
       </div>
 
       <div className="space-y-8">
