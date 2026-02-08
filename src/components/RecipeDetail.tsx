@@ -1,0 +1,125 @@
+'use client';
+
+import Link from 'next/link';
+import DeleteRecipeButton from '@/components/DeleteRecipeButton';
+import RecipeSteps from '@/components/RecipeSteps';
+import AddToShoppingCartButton from '@/components/AddToShoppingCartButton';
+import { useLanguage } from '@/contexts/LanguageContext';
+import type { Recipe } from '@prisma/client';
+
+interface RecipeDetailProps {
+  recipe: Recipe;
+  deleteAction: () => Promise<void>;
+}
+
+export default function RecipeDetail({ recipe, deleteAction }: RecipeDetailProps) {
+  const { t } = useLanguage();
+
+  return (
+    <main className="max-w-6xl mx-auto p-6">
+      <div className="mb-8 flex justify-between items-center">
+        <Link href="/" className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2 transition-colors">
+          &larr; {t('recipe.back')}
+        </Link>
+        <div className="flex gap-4">
+          <Link
+            href={`/recipes/${recipe.id}/edit`}
+            className="bg-emerald-600 text-white px-6 py-3 rounded-full font-medium hover:bg-emerald-700 transition shadow-sm hover:shadow"
+          >
+            {t('recipe.edit')}
+          </Link>
+          <DeleteRecipeButton deleteAction={deleteAction} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {/* Left Column: Content */}
+        <div className="space-y-8">
+          <div>
+            <h1 className="text-5xl font-extrabold text-emerald-700 mb-8 tracking-tight break-words">{recipe.title}</h1>
+            
+            {recipe.description && (
+              <p className="text-xl text-emerald-600 mb-6 leading-relaxed break-words">{recipe.description}</p>
+            )}
+
+            {(recipe as any).sourceUrl && (
+              <div className="mb-6">
+                <a
+                  href={(recipe as any).sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-600 hover:text-emerald-700 underline decoration-emerald-300 underline-offset-4 transition-colors"
+                >
+                  {t('recipe.source')} &rarr;
+                </a>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-4 text-sm font-bold text-stone-500 uppercase tracking-wider">
+              {recipe.cookMinutes && (
+                <div className="flex items-center gap-2 bg-orange-50 text-orange-500 px-3 py-1 rounded-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {recipe.cookMinutes} {t('recipe.cookTime')}
+                </div>
+              )}
+              {(recipe as any).category && (
+                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">
+                   <span className="text-lg">🏷️</span>
+                   {(recipe as any).category}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="border-t border-stone-200 my-8"></div>
+
+          <div className="space-y-8">
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-bold text-stone-800 flex items-center gap-2">
+                  <span className="text-orange-500">🍱</span> {t('recipe.ingredients')}
+                </h2>
+                <AddToShoppingCartButton
+                  recipeId={recipe.id}
+                  title={recipe.title}
+                  ingredients={recipe.ingredients}
+                />
+              </div>
+              <ul className="space-y-3 text-lg text-stone-700">
+                {recipe.ingredients.split('\n').map((ingredient, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="mt-2 block h-2 w-2 rounded-full bg-emerald-600 flex-shrink-0" />
+                    <span>{ingredient}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <RecipeSteps steps={recipe.steps} />
+          </div>
+        </div>
+
+        {/* Right Column: Image */}
+        <div>
+           <div className="sticky top-8">
+            {recipe.imageUrl ? (
+                <div className="aspect-square w-full overflow-hidden rounded-3xl shadow-xl bg-stone-100">
+                <img
+                    src={recipe.imageUrl}
+                    alt={recipe.title}
+                    className="object-cover w-full h-full"
+                />
+                </div>
+            ) : (
+                <div className="aspect-square w-full overflow-hidden rounded-3xl shadow-xl bg-stone-100 flex items-center justify-center text-stone-300 text-6xl">
+                    🍽️
+                </div>
+            )}
+           </div>
+        </div>
+      </div>
+    </main>
+  );
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface RecipeStepsProps {
   steps: string;
@@ -9,6 +10,7 @@ interface RecipeStepsProps {
 export default function RecipeSteps({ steps }: RecipeStepsProps) {
   const [activeStep, setActiveStep] = useState<number | null>(null);
   const stepRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const { t } = useLanguage();
   // Filter out empty lines to ensure the step count is accurate
   const stepList = steps.split('\n').filter((step) => step.trim() !== '');
 
@@ -39,7 +41,7 @@ export default function RecipeSteps({ steps }: RecipeStepsProps) {
     <section>
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold text-stone-800 flex items-center gap-2">
-          <span className="text-orange-500">📝</span> Steps
+          <span className="text-orange-500">📝</span> {t('recipe.steps')}
         </h2>
         <div className="flex items-center gap-2">
           {activeStep !== null && (
@@ -47,7 +49,7 @@ export default function RecipeSteps({ steps }: RecipeStepsProps) {
               onClick={handleCancel}
               className="text-sm text-stone-500 hover:text-stone-800 font-bold px-4 py-2 rounded-full hover:bg-stone-100 transition-colors"
             >
-              Exit
+              {t('recipe.exit')}
             </button>
           )}
           <button
@@ -58,7 +60,7 @@ export default function RecipeSteps({ steps }: RecipeStepsProps) {
                 : 'bg-orange-500 text-white hover:bg-orange-600'
             }`}
           >
-            {activeStep === null ? '🧑‍🍳 Start Cooking' : activeStep < stepList.length - 1 ? 'Next Step' : 'Finish'}
+            {activeStep === null ? t('recipe.startCooking') : activeStep < stepList.length - 1 ? t('recipe.nextStep') : t('recipe.finish')}
           </button>
         </div>
       </div>

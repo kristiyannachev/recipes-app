@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface AddToShoppingCartButtonProps {
   recipeId: string | number;
@@ -15,6 +16,7 @@ export default function AddToShoppingCartButton({
   ingredients,
 }: AddToShoppingCartButtonProps) {
   const [isInCart, setIsInCart] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem('shoppingCart') || '[]');
@@ -52,7 +54,7 @@ export default function AddToShoppingCartButton({
       }`}
     >
       <span>{isInCart ? '✓' : '🛒'}</span>
-      {isInCart ? 'In Cart' : 'Add to Cart'}
+      {isInCart ? t('cart.inCart') : t('cart.addToCart')}
     </button>
   );
 }

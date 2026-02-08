@@ -3,6 +3,7 @@
 'use client';
 
 import { useState, ChangeEvent, useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ImageUploadPreviewProps {
   initialImageUrl?: string | null;
@@ -10,6 +11,7 @@ interface ImageUploadPreviewProps {
 
 export default function ImageUploadPreview({ initialImageUrl }: ImageUploadPreviewProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialImageUrl || null);
+  const { t } = useLanguage();
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -31,7 +33,7 @@ export default function ImageUploadPreview({ initialImageUrl }: ImageUploadPrevi
   return (
     <div className="sticky top-8">
       <label className="block text-sm font-bold text-emerald-700 mb-2">
-        Image
+        {t('form.image')}
       </label>
       <input
         type="hidden"
