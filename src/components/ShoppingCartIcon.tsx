@@ -21,7 +21,7 @@ export default function ShoppingCartIcon() {
   return (
     <Link
       href="/cart"
-      className="relative p-2 text-stone-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-full transition-all duration-200"
+      className="relative p-2 text-stone-600 hover:text-emerald-700 rounded-full transition-all duration-200"
       aria-label="Shopping Cart"
     >
       <span className="text-2xl">🛒</span>
