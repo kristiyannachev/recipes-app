@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import type { Recipe } from '@prisma/client';
 import CategoryFilter from './CategoryFilter';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface RecipeListProps {
   recipes: Recipe[];
@@ -12,6 +13,7 @@ interface RecipeListProps {
 export default function RecipeList({ recipes }: RecipeListProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useLanguage();
 
   const filteredRecipes = recipes.filter((recipe) => {
     const matchesCategory = selectedCategory === null || recipe.category === selectedCategory;
@@ -24,7 +26,7 @@ export default function RecipeList({ recipes }: RecipeListProps) {
       <div className="mb-8">
         <input
           type="text"
-          placeholder="Search recipes..."
+          placeholder={t('home.searchPlaceholder')}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white text-lg"
@@ -88,7 +90,7 @@ export default function RecipeList({ recipes }: RecipeListProps) {
         ))}
         {filteredRecipes.length === 0 && (
           <p className="text-emerald-700 text-center py-10">
-            No recipes found.
+            {t('home.noSearchResults')}
           </p>
         )}
       </div>

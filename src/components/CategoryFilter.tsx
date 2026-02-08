@@ -1,4 +1,7 @@
+'use client';
+
 import { categories } from '../constants/categories';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CategoryFilterProps {
   selectedCategory: string | null;
@@ -6,6 +9,7 @@ interface CategoryFilterProps {
 }
 
 export default function CategoryFilter({ selectedCategory, onSelectCategory }: CategoryFilterProps) {
+  const { t } = useLanguage();
   return (
     <div className="flex flex-wrap gap-2 mb-6">
       <button
@@ -16,7 +20,7 @@ export default function CategoryFilter({ selectedCategory, onSelectCategory }: C
             : 'bg-white text-stone-600 border-stone-200 hover:border-emerald-400 hover:text-emerald-700 hover:bg-emerald-50'
         }`}
       >
-        All
+        {t('category.all')}
       </button>
       {categories.map((category) => (
         <button
