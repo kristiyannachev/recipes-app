@@ -83,7 +83,7 @@ export default function RecipeInstructions({ steps }: RecipeInstructionsProps) {
                 className={`flex items-center justify-center w-8 h-8 rounded-full border-2 font-bold text-sm transition-colors ${
                   activeStep === i
                     ? 'border-orange-500 bg-orange-500 text-white'
-                    : 'border-stone-300 text-stone-500 bg-white'
+                    : 'border-stone-300 text-white bg-emerald-600'
                 }`}
               >
                 {i + 1}
