@@ -70,26 +70,28 @@ export default function RecipeInstructions({ steps }: RecipeInstructionsProps) {
             ref={(el) => {
               stepRefs.current[i] = el;
             }}
-            className={`flex gap-4 p-6 rounded-3xl transition-all duration-500 border-2 ${
+            className={`flex items-start gap-4 p-4 rounded-xl transition-all duration-300 ${
               activeStep === i
-                ? 'bg-orange-50 border-orange-200 shadow-xl scale-105 transform'
+                ? 'bg-orange-50'
                 : activeStep !== null
-                ? 'opacity-30 blur-[1px] border-transparent grayscale'
-                : 'border-transparent hover:bg-stone-50'
+                ? 'opacity-40'
+                : 'hover:bg-stone-50'
             }`}
           >
-            <div className="relative flex-shrink-0">
+            <div className="flex-shrink-0">
               <span
-                className={`flex items-center justify-center w-10 h-10 rounded-full font-bold text-lg transition-colors ${
+                className={`flex items-center justify-center w-8 h-8 rounded-full border-2 font-bold text-sm transition-colors ${
                   activeStep === i
-                    ? 'bg-orange-500 text-white shadow-md'
-                    : 'bg-stone-100 text-stone-500'
+                    ? 'border-orange-500 bg-orange-500 text-white'
+                    : 'border-stone-300 text-stone-500 bg-white'
                 }`}
               >
                 {i + 1}
               </span>
             </div>
-            <span className={`mt-1 leading-relaxed ${activeStep === i ? 'font-medium text-stone-900' : ''}`}>{step}</span>
+            <p className={`leading-relaxed pt-0.5 ${activeStep === i ? 'font-medium text-stone-900' : ''}`}>
+              {step}
+            </p>
           </li>
         ))}
       </ol>
