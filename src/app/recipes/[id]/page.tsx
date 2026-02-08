@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import DeleteRecipeButton from '@/components/DeleteRecipeButton';
-import RecipeInstructions from '@/components/RecipeInstructions';
+import RecipeSteps from '@/components/RecipeSteps';
 import AddToShoppingCartButton from '@/components/AddToShoppingCartButton';
 
 export default async function RecipePage(props: {
@@ -114,7 +114,7 @@ export default async function RecipePage(props: {
               </ul>
             </section>
 
-            <RecipeInstructions steps={recipe.steps} />
+            <RecipeSteps steps={recipe.steps} />
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
-import CookingMode from '@/components/RecipeInstructions';
+import CookingMode from '@/components/RecipeSteps';
 
 export default async function CookRecipePage(props: {
   params: Promise<{ id: string }>;

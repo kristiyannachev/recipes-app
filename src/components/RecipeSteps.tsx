@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-interface RecipeInstructionsProps {
+interface RecipeStepsProps {
   steps: string;
 }
 
-export default function RecipeInstructions({ steps }: RecipeInstructionsProps) {
+export default function RecipeSteps({ steps }: RecipeStepsProps) {
   const [activeStep, setActiveStep] = useState<number | null>(null);
   const stepRefs = useRef<(HTMLLIElement | null)[]>([]);
   // Filter out empty lines to ensure the step count is accurate
@@ -39,7 +39,7 @@ export default function RecipeInstructions({ steps }: RecipeInstructionsProps) {
     <section>
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-2xl font-bold text-stone-800 flex items-center gap-2">
-          <span className="text-orange-500">📝</span> Instructions
+          <span className="text-orange-500">📝</span> Steps
         </h2>
         <div className="flex items-center gap-2">
           {activeStep !== null && (
