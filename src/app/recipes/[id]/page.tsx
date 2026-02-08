@@ -41,7 +41,7 @@ export default async function RecipePage(props: {
         <div className="flex gap-4">
           <Link
             href={`/recipes/${id}/edit`}
-            className="text-stone-600 hover:text-stone-900 border border-stone-300 hover:bg-stone-100 px-4 py-2 rounded-full transition-colors font-medium"
+            className="bg-emerald-600 text-white px-6 py-3 rounded-full font-medium hover:bg-emerald-700 transition shadow-sm hover:shadow"
           >
             Edit
           </Link>

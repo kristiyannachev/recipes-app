@@ -45,10 +45,10 @@ export default function AddToShoppingCartButton({
   return (
     <button
       onClick={toggleCart}
-      className={`px-4 py-2 rounded-full transition-colors font-medium border flex items-center gap-2 ${
+      className={`px-4 py-2 rounded-full transition-colors font-medium flex items-center gap-2 ${
         isInCart
-          ? 'bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200'
-          : 'text-stone-600 hover:text-stone-900 border-stone-300 hover:bg-stone-100 bg-white'
+          ? 'bg-emerald-100 text-emerald-700 py-3 border-emerald-200 hover:bg-emerald-200'
+          : 'bg-orange-400 text-white px-6 py-3 rounded-xl font-medium hover:bg-orange-600 transition shadow-sm hover:shadow'
       }`}
     >
       <span>{isInCart ? '✓' : '🛒'}</span>

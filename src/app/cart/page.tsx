@@ -74,7 +74,7 @@ export default function CartPage() {
         <h1 className="text-4xl font-extrabold text-emerald-700">Shopping Cart</h1>
         <button
           onClick={clearCart}
-          className="text-red-600 hover:text-red-800 font-medium px-4 py-2 rounded-full hover:bg-red-50 transition-colors"
+          className="bg-orange-400 text-white px-6 py-3 rounded-full font-medium hover:bg-orange-600 transition shadow-sm hover:shadow"
         >
           Clear Cart
         </button>

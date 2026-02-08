@@ -87,7 +87,7 @@ export default function RecipeList({ recipes }: RecipeListProps) {
           </Link>
         ))}
         {filteredRecipes.length === 0 && (
-          <p className="text-gray-500 text-center py-10">
+          <p className="text-emerald-700 text-center py-10">
             No recipes found.
           </p>
         )}

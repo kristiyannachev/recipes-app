@@ -13,7 +13,7 @@ export default function DeleteRecipeButton({ deleteAction }: DeleteRecipeButtonP
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="text-red-600 hover:text-red-800 border border-red-200 hover:bg-red-50 px-4 py-2 rounded-full transition-colors font-medium"
+        className="bg-orange-400 text-white px-6 py-3 rounded-full font-medium hover:bg-orange-600 transition shadow-sm hover:shadow"
       >
         Delete
       </button>
