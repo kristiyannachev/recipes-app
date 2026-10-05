@@ -1,17 +1,38 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import ImageUploadPreview from '@/components/ImageUploadPreview';
-import { categories } from '@/constants/categories';
-import { useLanguage } from '@/contexts/LanguageContext';
-import type { Recipe } from '@prisma/client';
+import type { Recipe } from "@prisma/client";
+import Link from "next/link";
+import type { ChangeEvent, FormEventHandler } from "react";
+import FormField, { formControlClassName } from "@/components/FormField";
+import ImageUploadPreview from "@/components/ImageUploadPreview";
+import { categories } from "@/constants/categories";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-interface RecipeFormProps {
+interface RecipeFormOptions {
   recipe?: Recipe;
-  action: (formData: FormData) => Promise<void>;
+  error?: string | null;
+  isSubmitting?: boolean;
+  submitLabel?: string;
+  onImageChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  uploading?: boolean;
 }
 
-export default function RecipeForm({ recipe, action }: RecipeFormProps) {
+type RecipeFormProps = RecipeFormOptions &
+  (
+    | { action: (formData: FormData) => Promise<void>; onSubmit?: never }
+    | { action?: never; onSubmit: FormEventHandler<HTMLFormElement> }
+  );
+
+export default function RecipeForm({
+  recipe,
+  action,
+  onSubmit,
+  error,
+  isSubmitting = false,
+  submitLabel,
+  onImageChange,
+  uploading,
+}: RecipeFormProps) {
   const { t } = useLanguage();
   const isEdit = !!recipe;
 
@@ -19,128 +40,141 @@ export default function RecipeForm({ recipe, action }: RecipeFormProps) {
     <main className="max-w-6xl mx-auto p-6">
       <div className="mb-6">
         <Link
-          href={isEdit ? `/recipes/${recipe.id}` : '/'}
+          href={isEdit ? `/recipes/${recipe.id}` : "/"}
           className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2 transition-colors"
         >
-          &larr; {t('form.back')}
+          &larr; {t("recipe.back")}
         </Link>
       </div>
       <h1 className="text-4xl font-extrabold text-emerald-700 mb-8">
-        {isEdit ? t('form.editTitle').replace('{title}', recipe.title) : t('form.newTitle')}
+        {isEdit
+          ? t("form.editTitle").replace("{title}", recipe.title)
+          : t("form.newTitle")}
       </h1>
+      {error && (
+        <div
+          role="alert"
+          className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100"
+        >
+          {error}
+        </div>
+      )}
       <form
         action={action}
+        onSubmit={onSubmit}
         className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-bold text-emerald-700 mb-2">
-                {t('form.title')}
-              </label>
+            <FormField label={t("form.title")} htmlFor="recipe-title">
               <input
                 type="text"
+                id="recipe-title"
                 name="title"
                 defaultValue={recipe?.title}
                 required
                 maxLength={50}
-                className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
+                className={formControlClassName}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-emerald-700 mb-2">
-                {t('form.description')}
-              </label>
+            </FormField>
+            <FormField
+              label={t("form.description")}
+              htmlFor="recipe-description"
+            >
               <textarea
+                id="recipe-description"
                 name="description"
-                defaultValue={recipe?.description || ''}
+                defaultValue={recipe?.description || ""}
                 rows={3}
                 maxLength={50}
-                className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
+                className={formControlClassName}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-emerald-700 mb-2">
-                {t('form.sourceUrl')}
-              </label>
+            </FormField>
+            <FormField label={t("form.sourceUrl")} htmlFor="recipe-sourceUrl">
               <input
                 type="url"
+                id="recipe-sourceUrl"
                 name="sourceUrl"
-                defaultValue={(recipe as any)?.sourceUrl || ''}
-                className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
+                defaultValue={recipe?.sourceUrl || ""}
+                className={formControlClassName}
               />
-            </div>
+            </FormField>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-bold text-emerald-700 mb-2">
-                  {t('form.cookTime')}
-                </label>
+              <FormField
+                label={t("form.cookTime")}
+                htmlFor="recipe-cookMinutes"
+              >
                 <input
                   type="number"
+                  id="recipe-cookMinutes"
                   name="cookMinutes"
-                  defaultValue={recipe?.cookMinutes || ''}
+                  defaultValue={recipe?.cookMinutes || ""}
                   min="1"
-                  className="w-full border border-stone-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
+                  className={formControlClassName}
                 />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-emerald-700 mb-2">
-                  {t('form.category')}
-                </label>
+              </FormField>
+              <FormField label={t("form.category")} htmlFor="recipe-category">
                 <select
+                  id="recipe-category"
                   name="category"
-                  defaultValue={(recipe as any)?.category || ''}
-                  className="w-full border border-stone-200 rounded-xl p-3 bg-white focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
+                  defaultValue={recipe?.category || ""}
+                  className={formControlClassName}
                 >
-                  <option value="">{t('form.selectCategory')}</option>
+                  <option value="">{t("form.selectCategory")}</option>
                   {categories.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
                   ))}
                 </select>
-              </div>
+              </FormField>
             </div>
-            <div>
-              <label className="block text-sm font-bold text-emerald-700 mb-2">
-                {t('form.ingredients')}
-              </label>
+            <FormField
+              label={t("form.ingredients")}
+              htmlFor="recipe-ingredients"
+            >
               <textarea
+                id="recipe-ingredients"
                 name="ingredients"
                 defaultValue={recipe?.ingredients}
                 required
                 rows={8}
-                className="w-full border border-stone-200 rounded-xl p-3 h-32 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
+                className={`${formControlClassName} h-32`}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-emerald-700 mb-2">
-                {t('form.steps')}
-              </label>
+            </FormField>
+            <FormField label={t("form.steps")} htmlFor="recipe-steps">
               <textarea
+                id="recipe-steps"
                 name="steps"
                 defaultValue={recipe?.steps}
                 required
                 rows={10}
-                className="w-full border border-stone-200 rounded-xl p-3 h-40 focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white"
+                className={`${formControlClassName} h-40`}
               />
-            </div>
+            </FormField>
           </div>
 
           <div>
-            <ImageUploadPreview initialImageUrl={recipe?.imageUrl} />
+            <ImageUploadPreview
+              initialImageUrl={recipe?.imageUrl}
+              onImageChange={onImageChange}
+              uploading={uploading}
+            />
           </div>
         </div>
         <div className="pt-8 border-t border-stone-100 mt-8 flex justify-end gap-4">
           <Link
-            href={isEdit ? `/recipes/${recipe.id}` : '/'}
+            href={isEdit ? `/recipes/${recipe.id}` : "/"}
             className="px-6 py-3 rounded-xl bg-stone-100 text-stone-700 font-bold text-lg hover:bg-stone-200 transition-all"
           >
-            {t('recipe.cancel')}
+            {t("recipe.cancel")}
           </Link>
           <button
             type="submit"
-            className="px-6 py-3 rounded-xl bg-orange-500 text-white font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
+            disabled={isSubmitting}
+            className="px-6 py-3 rounded-xl bg-orange-500 text-white font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {isEdit ? t('form.save') : t('form.create')}
+            {submitLabel ?? (isEdit ? t("form.save") : t("form.create"))}
           </button>
         </div>
       </form>
