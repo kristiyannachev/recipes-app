@@ -1,6 +1,7 @@
-import { prisma } from '@/lib/prisma';
-import { notFound, redirect } from 'next/navigation';
-import RecipeDetail from '@/components/RecipeDetail';
+import { revalidatePath } from "next/cache";
+import { notFound, redirect } from "next/navigation";
+import RecipeDetail from "@/components/RecipeDetail";
+import { prisma } from "@/lib/prisma";
 
 export default async function RecipePage(props: {
   params: Promise<{ id: string }>;
@@ -9,13 +10,14 @@ export default async function RecipePage(props: {
   const { id } = params;
 
   async function deleteRecipe() {
-    'use server';
+    "use server";
     await prisma.recipe.delete({
       where: {
         id: /^\d+$/.test(id) ? parseInt(id) : id,
       } as any,
     });
-    redirect('/');
+    revalidatePath("/");
+    redirect("/");
   }
 
   const recipe = await prisma.recipe.findUnique({

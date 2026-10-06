@@ -8,6 +8,6 @@
     "rootDir": ".",
     "outDir": ".test-output"
   },
-  "include": ["tests/**/*.ts"],
+  "include": ["tests/*.test.ts"],
   "exclude": ["node_modules", ".test-output"]
 }

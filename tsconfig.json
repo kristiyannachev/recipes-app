@@ -30,5 +30,11 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", ".test-output"]
+  "exclude": [
+    "node_modules",
+    ".test-output",
+    ".next-e2e",
+    "test-results",
+    "playwright-report"
+  ]
 }

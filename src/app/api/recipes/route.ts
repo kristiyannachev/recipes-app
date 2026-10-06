@@ -22,6 +22,7 @@ export async function POST(req: Request) {
       steps,
       cookMinutes,
       imageUrl,
+      sourceUrl,
       categories = [],
     } = body;
 
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
         steps,
         cookMinutes: cookMinutes ? Number(cookMinutes) : null,
         imageUrl: imageUrl ?? null,
+        sourceUrl: sourceUrl || null,
         categories: selectedCategories,
       },
     });

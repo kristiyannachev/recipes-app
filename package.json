@@ -13,6 +13,9 @@
     "typecheck": "tsc --noEmit",
     "pretest": "prisma generate",
     "test": "tsc -p tsconfig.tests.json && node --test .test-output/tests/*.test.js",
+    "pretest:e2e": "prisma generate",
+    "test:e2e": "playwright test",
+    "test:all": "npm test && npm run test:e2e",
     "lint": "biome check",
     "format": "biome format --write"
   },
@@ -25,6 +28,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^20",
     "@types/react": "^19",

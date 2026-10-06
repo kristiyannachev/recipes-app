@@ -76,9 +76,39 @@ Run `npm run setup` and restart the development server after pulling this change
 
 ## Checks and production preview
 
+Install the browser used by the tests once after `npm ci`:
+
+```bash
+npx playwright install chromium
+```
+
+Run the tests:
+
+```bash
+npm test           # Fast category validation and database migration tests
+npm run test:e2e   # Browser tests against a production build
+npm run test:all   # Both suites
+```
+
+The browser suite covers recipe creation, editing, deletion, search, multiple
+categories, EN/BG translations, cooking steps, shopping-cart persistence, and
+confirmation dialogs. It also checks that the global controls leave room for
+page content at mobile and desktop widths.
+
+Each browser run creates a temporary SQLite database using the real migrations,
+builds into `.next-e2e`, and starts its own server on port **3100**. Your recipes,
+uploads, and normal `.next` build stay unchanged. Leave port 3100 free; the tests
+refuse to reuse an existing server. Building requires internet access for Google
+fonts, as it does for the normal production build.
+
+Failed browser tests save screenshots and traces in `test-results`. Open the
+HTML report with `npx playwright show-report`. To run a single file, use, for
+example, `npm run test:e2e -- tests/e2e/cart.spec.ts`.
+
+Other checks and a production preview:
+
 ```bash
 npm run typecheck
-npm test
 npm run lint
 npm run build
 npm start
