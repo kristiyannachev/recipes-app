@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { ChangeEvent, FormEventHandler } from "react";
 import FormField, { formControlClassName } from "@/components/FormField";
 import ImageUploadPreview from "@/components/ImageUploadPreview";
-import { categories } from "@/constants/categories";
+import { categories, getCategoryLabel } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RecipeFormOptions {
@@ -123,7 +123,7 @@ export default function RecipeForm({
                   <option value="">{t("form.selectCategory")}</option>
                   {categories.map((c) => (
                     <option key={c} value={c}>
-                      {c}
+                      {getCategoryLabel(c, t)}
                     </option>
                   ))}
                 </select>

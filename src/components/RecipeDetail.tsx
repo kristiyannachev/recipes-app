@@ -7,6 +7,7 @@ import DeleteRecipeButton from "@/components/DeleteRecipeButton";
 import RecipeImage from "@/components/RecipeImage";
 import RecipeIngredients from "@/components/RecipeIngredients";
 import RecipeSteps from "@/components/RecipeSteps";
+import { getCategoryLabel } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RecipeDetailProps {
@@ -79,7 +80,7 @@ export default function RecipeDetail({
               {recipe.category && (
                 <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">
                   <span className="text-lg">🏷️</span>
-                  {recipe.category}
+                  {getCategoryLabel(recipe.category, t)}
                 </div>
               )}
             </div>

@@ -1,9 +1,15 @@
+"use client";
+
 import type { Recipe } from "@prisma/client";
 import Link from "next/link";
 import CookTime from "@/components/CookTime";
 import RecipeImage from "@/components/RecipeImage";
+import { getCategoryLabel } from "@/constants/categories";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
+  const { t } = useLanguage();
+
   return (
     <Link
       href={`/recipes/${recipe.id}`}
@@ -43,7 +49,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
         {recipe.category && (
           <div className="mt-auto pt-3">
             <span className="inline-block px-3 py-1 text-xs font-bold text-emerald-700 bg-emerald-50 rounded-full border border-emerald-100">
-              {recipe.category}
+              {getCategoryLabel(recipe.category, t)}
             </span>
           </div>
         )}
