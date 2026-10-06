@@ -1,10 +1,13 @@
 // src/app/api/recipes/route.ts
-import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+
+import { revalidatePath } from "next/cache";
+import { NextResponse } from "next/server";
+import { type Category, parseRecipeCategories } from "@/constants/categories";
+import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   const recipes = await prisma.recipe.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { createdAt: "desc" },
   });
   return NextResponse.json(recipes);
 }
@@ -12,10 +15,31 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { title, description, ingredients, steps, cookMinutes, imageUrl, category } = body;
+    const {
+      title,
+      description,
+      ingredients,
+      steps,
+      cookMinutes,
+      imageUrl,
+      categories = [],
+    } = body;
 
     if (!title || !ingredients || !steps) {
-      return NextResponse.json({ error: 'title, ingredients, and steps required' }, { status: 400 });
+      return NextResponse.json(
+        { error: "title, ingredients, and steps required" },
+        { status: 400 },
+      );
+    }
+
+    let selectedCategories: Category[];
+    try {
+      selectedCategories = parseRecipeCategories(categories);
+    } catch {
+      return NextResponse.json(
+        { error: "Categories must be an array of supported category names." },
+        { status: 400 },
+      );
     }
 
     const recipe = await prisma.recipe.create({
@@ -26,13 +50,14 @@ export async function POST(req: Request) {
         steps,
         cookMinutes: cookMinutes ? Number(cookMinutes) : null,
         imageUrl: imageUrl ?? null,
-        category: category ?? null,
+        categories: selectedCategories,
       },
     });
 
+    revalidatePath("/");
     return NextResponse.json(recipe, { status: 201 });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

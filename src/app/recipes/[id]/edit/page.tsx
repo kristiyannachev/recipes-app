@@ -1,10 +1,11 @@
-import { prisma } from '@/lib/prisma';
-import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
-import { join } from 'path';
-import { writeFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import RecipeForm from '@/components/RecipeForm';
+import { existsSync } from "fs";
+import { mkdir, writeFile } from "fs/promises";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { join } from "path";
+import RecipeForm from "@/components/RecipeForm";
+import { parseRecipeCategories } from "@/constants/categories";
+import { prisma } from "@/lib/prisma";
 
 export default async function EditRecipePage(props: {
   params: Promise<{ id: string }>;
@@ -19,38 +20,40 @@ export default async function EditRecipePage(props: {
   });
 
   if (!recipe) {
-    redirect('/');
+    redirect("/");
   }
 
   async function updateRecipe(formData: FormData) {
-    'use server';
+    "use server";
 
-    const imageFile = formData.get('image') as File | null;
-    let imageUrl = formData.get('existingImageUrl') as string;
+    const categories = parseRecipeCategories(formData.getAll("categories"));
+
+    const imageFile = formData.get("image") as File | null;
+    let imageUrl = formData.get("existingImageUrl") as string;
 
     if (imageFile && imageFile.size > 0) {
       const buffer = Buffer.from(await imageFile.arrayBuffer());
-      const uploadDir = join(process.cwd(), 'public/uploads');
+      const uploadDir = join(process.cwd(), "public/uploads");
 
       if (!existsSync(uploadDir)) {
         await mkdir(uploadDir, { recursive: true });
       }
 
-      const filename = `${Date.now()}-${imageFile.name.replace(/\s/g, '_')}`;
+      const filename = `${Date.now()}-${imageFile.name.replace(/\s/g, "_")}`;
       await writeFile(join(uploadDir, filename), buffer);
       imageUrl = `/uploads/${filename}`;
     }
 
-    const rawCookMinutes = formData.get('cookMinutes') as string;
-    const sourceUrl = formData.get('sourceUrl') as string;
+    const rawCookMinutes = formData.get("cookMinutes") as string;
+    const sourceUrl = formData.get("sourceUrl") as string;
 
     const data = {
-      title: formData.get('title') as string,
-      description: formData.get('description') as string,
+      title: formData.get("title") as string,
+      description: formData.get("description") as string,
       cookMinutes: rawCookMinutes ? parseInt(rawCookMinutes) : null,
-      category: formData.get('category') as string,
-      ingredients: formData.get('ingredients') as string,
-      steps: formData.get('steps') as string,
+      categories,
+      ingredients: formData.get("ingredients") as string,
+      steps: formData.get("steps") as string,
       imageUrl: imageUrl,
       sourceUrl: sourceUrl || null,
     };
@@ -63,7 +66,7 @@ export default async function EditRecipePage(props: {
     });
 
     revalidatePath(`/recipes/${id}`);
-    revalidatePath('/');
+    revalidatePath("/");
     redirect(`/recipes/${id}`);
   }
 

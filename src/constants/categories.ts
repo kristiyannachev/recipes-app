@@ -19,6 +19,8 @@ export const categories = [
   "Others",
 ] as const;
 
+export type Category = (typeof categories)[number];
+
 type TranslationKey = keyof typeof dictionary.en;
 
 const categoryTranslationKeys: Record<
@@ -49,4 +51,27 @@ export function getCategoryLabel(
 ): string {
   const knownCategory = categories.find((value) => value === category);
   return knownCategory ? t(categoryTranslationKeys[knownCategory]) : category;
+}
+
+export function getRecipeCategories(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter(
+        (category): category is string => typeof category === "string",
+      )
+    : [];
+}
+
+function isCategory(value: unknown): value is Category {
+  return (
+    typeof value === "string" &&
+    categories.some((category) => category === value)
+  );
+}
+
+export function parseRecipeCategories(value: unknown): Category[] {
+  if (!Array.isArray(value) || !value.every(isCategory)) {
+    throw new Error("Categories must be an array of supported category names.");
+  }
+
+  return [...new Set(value)];
 }

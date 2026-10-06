@@ -5,7 +5,8 @@ import Link from "next/link";
 import type { ChangeEvent, FormEventHandler } from "react";
 import FormField, { formControlClassName } from "@/components/FormField";
 import ImageUploadPreview from "@/components/ImageUploadPreview";
-import { categories, getCategoryLabel } from "@/constants/categories";
+import RecipeCategoryPicker from "@/components/RecipeCategoryPicker";
+import { getRecipeCategories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RecipeFormOptions {
@@ -99,7 +100,7 @@ export default function RecipeForm({
                 className={formControlClassName}
               />
             </FormField>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="md:w-1/2">
               <FormField
                 label={t("form.cookTime")}
                 htmlFor="recipe-cookMinutes"
@@ -113,22 +114,10 @@ export default function RecipeForm({
                   className={formControlClassName}
                 />
               </FormField>
-              <FormField label={t("form.category")} htmlFor="recipe-category">
-                <select
-                  id="recipe-category"
-                  name="category"
-                  defaultValue={recipe?.category || ""}
-                  className={formControlClassName}
-                >
-                  <option value="">{t("form.selectCategory")}</option>
-                  {categories.map((c) => (
-                    <option key={c} value={c}>
-                      {getCategoryLabel(c, t)}
-                    </option>
-                  ))}
-                </select>
-              </FormField>
             </div>
+            <RecipeCategoryPicker
+              defaultSelected={getRecipeCategories(recipe?.categories)}
+            />
             <FormField
               label={t("form.ingredients")}
               htmlFor="recipe-ingredients"

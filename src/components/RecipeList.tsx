@@ -3,6 +3,7 @@
 import type { Recipe } from "@prisma/client";
 import { useState } from "react";
 import RecipeCard from "@/components/RecipeCard";
+import { getRecipeCategories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
 import CategoryFilter from "./CategoryFilter";
 
@@ -17,7 +18,8 @@ export default function RecipeList({ recipes }: RecipeListProps) {
 
   const filteredRecipes = recipes.filter((recipe) => {
     const matchesCategory =
-      selectedCategory === null || recipe.category === selectedCategory;
+      selectedCategory === null ||
+      getRecipeCategories(recipe.categories).includes(selectedCategory);
     const matchesSearch = recipe.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());

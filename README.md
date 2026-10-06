@@ -30,11 +30,19 @@ Google fonts used by the app.
 After the first setup, start the app with just `npm run dev`.
 Run `npm run setup` again after pulling changes to the Prisma schema or migrations.
 
+Development, build, typecheck, and test commands automatically regenerate Prisma
+Client before running. If your editor still reports an old model field such as
+`category` instead of `categories` after a schema change, run `npm run typecheck`.
+In VS Code, open the Command Palette (**Cmd+Shift+P**) and choose
+**TypeScript: Restart TS Server** to refresh the editor's cached types.
+
 ## Try the main flows
 
 - Open a recipe, or use **+ New Recipe** to create one. Enter ingredients and
-  cooking steps on separate lines; optionally choose a category and photo.
-- Search by title and select a category on the home page.
+  cooking steps on separate lines; choose any number of categories and optionally
+  upload a photo. Selected category chips turn green.
+- Search by title and select a category on the home page. A recipe tagged with
+  both Chicken and Soups appears under either filter.
 - Open a recipe and use **Start Cooking** to advance through its steps.
 - Choose **Add to Cart**, open the cart icon, and tick ingredients as you shop.
   Refresh to check that the checklist persists.
@@ -46,6 +54,8 @@ Run `npm run setup` again after pulling changes to the Prisma schema or migratio
 - `src/components/RecipeForm.tsx`: shared create/edit form layout and fields.
 - `src/components/NewRecipeForm.tsx`: create/upload requests, errors, and pending state.
 - `src/components/FormField.tsx`: reusable labels and shared form-control styles.
+- `src/components/RecipeCategoryPicker.tsx`: category checkboxes shared by create/edit forms.
+- `src/components/RecipeCategoryBadges.tsx`: translated category badges shared by cards and details.
 - `src/components/RecipeList.tsx`: search and category filtering.
 - `src/components/RecipeCard.tsx`: one recipe in the list.
 - `src/components/RecipeImage.tsx`: images and the empty-image placeholder,
@@ -58,14 +68,25 @@ Run `npm run setup` again after pulling changes to the Prisma schema or migratio
 - `src/constants/categories.ts`: the category list shared by filters and forms.
 - `prisma/schema.prisma` and `prisma/migrations/`: database schema and history.
 
+Recipe categories are stored as a JSON array, supported by this project's
+[Prisma version with SQLite](https://www.prisma.io/docs/orm/reference/database-features).
+The category migration converts existing values to single-item arrays and
+uncategorized recipes to empty arrays, preserving all other recipe data.
+Run `npm run setup` and restart the development server after pulling this change.
+
 ## Checks and production preview
 
 ```bash
 npm run typecheck
+npm test
 npm run lint
 npm run build
 npm start
 ```
+
+`npm test` checks category validation and runs the database migration against a
+temporary SQLite database, including category preservation, multiple-category
+saves, edits, and clearing all categories. It leaves your local recipes unchanged.
 
 `npm start` serves the production build; use `npm run dev` for everyday development.
 If port 3000 is occupied, run `npm run dev -- --port 3001` and open

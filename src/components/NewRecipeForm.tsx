@@ -29,7 +29,7 @@ export default function NewRecipeForm() {
           cookMinutes: formData.get("cookMinutes")
             ? Number(formData.get("cookMinutes"))
             : null,
-          category: formData.get("category"),
+          categories: formData.getAll("categories"),
           ingredients: formData.get("ingredients"),
           steps: formData.get("steps"),
           sourceUrl: formData.get("sourceUrl"),

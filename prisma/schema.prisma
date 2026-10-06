@@ -16,6 +16,6 @@ model Recipe {
   cookMinutes Int?
   imageUrl    String?
   sourceUrl   String?
-  category    String?
+  categories  Json     @default("[]")
   createdAt   DateTime @default(now())
 }

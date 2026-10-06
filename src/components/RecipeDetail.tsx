@@ -4,10 +4,11 @@ import type { Recipe } from "@prisma/client";
 import Link from "next/link";
 import CookTime from "@/components/CookTime";
 import DeleteRecipeButton from "@/components/DeleteRecipeButton";
+import RecipeCategoryBadges from "@/components/RecipeCategoryBadges";
 import RecipeImage from "@/components/RecipeImage";
 import RecipeIngredients from "@/components/RecipeIngredients";
 import RecipeSteps from "@/components/RecipeSteps";
-import { getCategoryLabel } from "@/constants/categories";
+import { getRecipeCategories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RecipeDetailProps {
@@ -20,6 +21,7 @@ export default function RecipeDetail({
   deleteAction,
 }: RecipeDetailProps) {
   const { t } = useLanguage();
+  const categories = getRecipeCategories(recipe.categories);
 
   return (
     <main className="max-w-6xl mx-auto p-6">
@@ -77,11 +79,11 @@ export default function RecipeDetail({
                   iconClassName="h-5 w-5"
                 />
               )}
-              {recipe.category && (
-                <div className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">
-                  <span className="text-lg">🏷️</span>
-                  {getCategoryLabel(recipe.category, t)}
-                </div>
+              {categories.length > 0 && (
+                <RecipeCategoryBadges
+                  categories={categories}
+                  variant="detail"
+                />
               )}
             </div>
           </div>

@@ -3,11 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "prisma generate",
     "dev": "next dev",
+    "prebuild": "prisma generate",
     "build": "next build",
     "start": "next start",
     "setup": "prisma generate && prisma migrate deploy",
+    "pretypecheck": "prisma generate",
     "typecheck": "tsc --noEmit",
+    "pretest": "prisma generate",
+    "test": "tsc -p tsconfig.tests.json && node --test .test-output/tests/*.test.js",
     "lint": "biome check",
     "format": "biome format --write"
   },
