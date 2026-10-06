@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 import ShoppingCartRecipe from "@/components/ShoppingCartRecipe";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { CartItem, StoredCartItem } from "@/types/shopping-cart";
 
 export default function CartPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const storedCart: StoredCartItem[] = JSON.parse(
@@ -46,25 +50,24 @@ export default function CartPage() {
   };
 
   const clearCart = () => {
-    if (confirm("Are you sure you want to clear your cart?")) {
-      setCart([]);
-      localStorage.setItem("shoppingCart", "[]");
-      window.dispatchEvent(new Event("storage"));
-    }
+    setCart([]);
+    setIsClearDialogOpen(false);
+    localStorage.setItem("shoppingCart", "[]");
+    window.dispatchEvent(new Event("storage"));
   };
 
   if (cart.length === 0) {
     return (
       <main className="max-w-3xl mx-auto p-6 text-center">
         <h1 className="text-4xl font-extrabold text-emerald-700 mb-8">
-          Shopping Cart
+          {t("cart.title")}
         </h1>
-        <p className="text-xl text-stone-600 mb-8">Your cart is empty.</p>
+        <p className="text-xl text-stone-600 mb-8">{t("cart.empty")}</p>
         <Link
           href="/"
           className="bg-orange-400 text-white px-6 py-3 rounded-full font-medium hover:bg-orange-600 transition shadow-sm hover:shadow"
         >
-          Browse Recipes
+          {t("cart.browse")}
         </Link>
       </main>
     );
@@ -77,17 +80,17 @@ export default function CartPage() {
           href="/"
           className="text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-2 transition-colors"
         >
-          &larr; Back to recipes
+          &larr; {t("cart.back")}
         </Link>
         <h1 className="text-4xl font-extrabold text-emerald-700">
-          Shopping Cart
+          {t("cart.title")}
         </h1>
         <button
           type="button"
-          onClick={clearCart}
+          onClick={() => setIsClearDialogOpen(true)}
           className="bg-orange-400 text-white px-6 py-3 rounded-full font-medium hover:bg-orange-600 transition shadow-sm hover:shadow"
         >
-          Clear Cart
+          {t("cart.clear")}
         </button>
       </div>
 
@@ -101,6 +104,15 @@ export default function CartPage() {
           />
         ))}
       </div>
+      <ConfirmationDialog
+        isOpen={isClearDialogOpen}
+        title={t("cart.clearConfirmTitle")}
+        message={t("cart.confirmClear")}
+        cancelLabel={t("recipe.cancel")}
+        confirmLabel={t("cart.clear")}
+        onCancel={() => setIsClearDialogOpen(false)}
+        onConfirm={clearCart}
+      />
     </main>
   );
 }
