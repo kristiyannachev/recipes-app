@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
@@ -13,6 +13,7 @@ export default function NavBar() {
   const { language, setLanguage, t } = useLanguage();
   const user = useUser();
   const router = useRouter();
+  const pathname = usePathname();
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -21,6 +22,14 @@ export default function NavBar() {
       aria-label={t("nav.controls")}
       className="max-w-7xl mx-auto w-full px-6 pt-6 flex flex-wrap items-center justify-end gap-3"
     >
+      <Link
+        href="/"
+        aria-current={pathname === "/" ? "page" : undefined}
+        className="flex items-center gap-2 rounded-full border border-stone-100 bg-white px-4 py-2 text-sm font-bold text-emerald-700 shadow-sm transition-colors hover:bg-emerald-50 focus-visible:outline-2 focus-visible:outline-emerald-600"
+      >
+        <span aria-hidden="true">🏠</span>
+        {t("nav.home")}
+      </Link>
       {user ? (
         <>
           <Link
