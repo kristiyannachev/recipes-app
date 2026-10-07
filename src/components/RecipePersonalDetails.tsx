@@ -54,11 +54,11 @@ export default function RecipePersonalDetails({
   }
   return (
     <section className="bg-white rounded-3xl p-6 shadow-sm space-y-4">
-      <h2 className="text-xl font-bold text-emerald-700">
-        {t("personal.title")}
-      </h2>
-      {user ? (
-        <>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-xl font-bold text-emerald-700">
+          {t("personal.title")}
+        </h2>
+        {user && (
           <button
             type="button"
             aria-pressed={favorite}
@@ -68,6 +68,10 @@ export default function RecipePersonalDetails({
           >
             {t(favorite ? "personal.removeFavorite" : "personal.addFavorite")}
           </button>
+        )}
+      </div>
+      {user ? (
+        <>
           <form
             onSubmit={(event) => {
               event.preventDefault();

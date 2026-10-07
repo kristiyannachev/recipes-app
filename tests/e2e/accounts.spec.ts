@@ -456,3 +456,75 @@ test("preference validation and origin checks reject unsafe mutations", async ({
     isFavorite: false,
   });
 });
+
+test("profile saves a member's name and uploaded photo, updates recipe credit, and translates", async ({
+  browser,
+  baseURL,
+}) => {
+  const { context, user } = await memberContext(browser, baseURL);
+  try {
+    const recipe = await createRecipe(context.request);
+    const page = await context.newPage();
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto("/");
+    await page.getByRole("link", { name: "My profile", exact: true }).click();
+    await expect(page.getByLabel("Your name", { exact: true })).toHaveValue(
+      user.name,
+    );
+    await page.getByLabel("Your name", { exact: true }).fill("Updated cook");
+    await page.locator('input[type="file"]').setInputFiles({
+      name: "avatar.png",
+      mimeType: "image/png",
+      buffer: Buffer.from(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aT1cAAAAASUVORK5CYII=",
+        "base64",
+      ),
+    });
+    await page
+      .getByRole("button", { name: "Save Changes", exact: true })
+      .click();
+    await expect(page.getByRole("status")).toHaveText("Profile updated.");
+    await page.reload();
+    await expect(page.getByLabel("Your name", { exact: true })).toHaveValue(
+      "Updated cook",
+    );
+    const photo = page.getByRole("img", { name: "Profile photo preview" });
+    await expect(photo).toHaveAttribute("src", /^\/uploads\/.+\.png$/);
+    const imageUrl = await photo.getAttribute("src");
+    if (!imageUrl) throw new Error("Missing profile photo URL");
+    expect((await context.request.get(imageUrl)).ok()).toBeTruthy();
+    const session = await context.request.get("/api/auth/get-session");
+    const savedUser = (await session.json()).user;
+    expect(savedUser).toMatchObject({
+      id: user.id,
+      name: "Updated cook",
+      email: user.email,
+      role: "user",
+      image: imageUrl,
+    });
+    await page.getByRole("button", { name: "BG", exact: true }).click();
+    await expect(
+      page.getByRole("heading", { name: "Моят профил" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("img", { name: "Преглед на профилната снимка" }),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBe(true);
+    await page.goto(`/recipes/${recipe.id}`);
+    await expect(
+      page.getByText("Updated cook", { exact: true }).last(),
+    ).toBeVisible();
+  } finally {
+    await context.close();
+  }
+});
+
+test("profile requires sign-in", async ({ page, context }) => {
+  await context.clearCookies();
+  await page.goto("/profile");
+  await expect(page).toHaveURL(/\/sign-in\?next=\/profile$/);
+});

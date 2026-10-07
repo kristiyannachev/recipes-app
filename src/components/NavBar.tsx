@@ -7,6 +7,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
 import { authClient } from "@/lib/auth-client";
 import ShoppingCartIcon from "./ShoppingCartIcon";
+import UserAvatar from "./UserAvatar";
 
 export default function NavBar() {
   const { language, setLanguage, t } = useLanguage();
@@ -22,14 +23,18 @@ export default function NavBar() {
     >
       {user ? (
         <>
-          <span className="text-sm text-emerald-700 break-all">
-            {user.name}
-            {user.role === "admin" ? ` · ${t("auth.admin")}` : ""}
-          </span>
+          <Link
+            href="/profile"
+            aria-label={t("profile.title")}
+            className="flex min-w-0 max-w-full items-center gap-2 rounded-full border border-stone-100 bg-white py-1.5 pl-1.5 pr-4 text-sm font-bold text-emerald-700 shadow-sm transition-colors hover:bg-emerald-50 focus-visible:outline-2 focus-visible:outline-emerald-600"
+          >
+            <UserAvatar name={user.name} image={user.image} />
+            <span className="min-w-0 max-w-40 truncate">{user.name}</span>
+          </Link>
           <button
             type="button"
             disabled={busy}
-            className="text-sm font-bold text-emerald-700"
+            className="rounded-full border border-emerald-200 bg-white px-4 py-2 text-sm font-bold text-emerald-700 shadow-sm transition-colors hover:bg-emerald-50 disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-emerald-600"
             onClick={async () => {
               setBusy(true);
               setFailed(false);
@@ -52,7 +57,10 @@ export default function NavBar() {
           {failed && <span role="alert">{t("error.auth")}</span>}
         </>
       ) : (
-        <Link href="/sign-in" className="text-sm font-bold text-emerald-700">
+        <Link
+          href="/sign-in"
+          className="rounded-full bg-emerald-600 px-5 py-2 text-sm font-bold text-white shadow-sm transition-colors hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-emerald-600 focus-visible:outline-offset-2"
+        >
           {t("auth.signIn")}
         </Link>
       )}

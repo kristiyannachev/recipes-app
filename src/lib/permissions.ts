@@ -1,4 +1,10 @@
-export type CurrentUser = { id: string; name: string; role: string };
+export type CurrentUser = {
+  id: string;
+  name: string;
+  role: string;
+  image?: string | null;
+  email?: string;
+};
 
 export function canEditRecipe(
   user: CurrentUser | null,

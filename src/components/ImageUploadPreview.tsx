@@ -8,12 +8,16 @@ interface ImageUploadPreviewProps {
   initialImageUrl?: string | null;
   onImageChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   uploading?: boolean;
+  label?: string;
+  previewAlt?: string;
 }
 
 export default function ImageUploadPreview({
   initialImageUrl,
   onImageChange,
   uploading = false,
+  label,
+  previewAlt,
 }: ImageUploadPreviewProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     initialImageUrl || null,
@@ -51,7 +55,7 @@ export default function ImageUploadPreview({
         htmlFor="recipe-image"
         className="block text-sm font-bold text-emerald-700 mb-2"
       >
-        {t("form.image")}
+        {label ?? t("form.image")}
       </label>
       <input
         type="hidden"
@@ -60,7 +64,7 @@ export default function ImageUploadPreview({
       />
       <RecipeImage
         src={previewUrl}
-        alt={t("form.imagePreview")}
+        alt={previewAlt ?? t("form.imagePreview")}
         className="rounded-3xl shadow-xl mb-6"
       />
       <input
