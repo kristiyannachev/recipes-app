@@ -152,6 +152,40 @@ The category migration converts existing values to single-item arrays and
 uncategorized recipes to empty arrays, preserving all other recipe data.
 Run `npm run setup` and restart the development server after pulling this change.
 
+## Recipe backup and restore
+
+Sign in as an administrator and open **My profile → Recipe backups**.
+
+1. Click **Download backup** and keep the `.json.gz` file somewhere safe. It
+   contains the shared recipe collection and the actual uploaded recipe photos.
+2. To restore on this installation or another one, select the file and click
+   **Preview restore**. Review how many recipes will be added or updated and how
+   many will be assigned to your administrator account.
+3. Click **Restore backup** and confirm in the dialog. Matching recipe IDs are
+   updated; missing IDs are added. Other recipes are retained. Repeating a restore
+   keeps the same recipe IDs and does not duplicate recipes.
+
+All recipe fields, multiple categories, original creation dates and creator emails
+are included. Existing accounts are matched by email. Recipes without a matching
+account are assigned to the administrator performing the restore. For a new
+installation, create the desired accounts before restoring to retain their recipe
+ownership. Recipe links and shopping-cart references continue to use the same IDs.
+
+This is a recipe collection backup: it does not include accounts, passwords,
+profile photos, private notes, favorites or browser shopping carts. Existing notes
+and favorites remain attached to matching recipes on the target installation.
+External recipe-photo URLs remain links; their image files are not downloaded.
+The backup contains creator email addresses, so keep the file private.
+
+Backups use versioned gzip-compressed JSON, with embedded photos. Limits are
+100 MB per backup file, 200 MB of expanded JSON, 10,000 recipes, and 5 MB per photo.
+Exports additionally cap total unencoded photo bytes at 100 MB. An export fails
+if an uploaded recipe photo is missing, instead of producing an incomplete backup.
+Unsupported versions, invalid data and incomplete photo archives are rejected
+before any writes. Recipe changes commit in one database transaction; fresh photo
+filenames prevent overwriting existing uploads, and failed restores remove their
+newly written photo files. Successful restores leave previous uploads in place.
+
 ## Checks and production preview
 
 Install the browser used by the tests once after `npm ci`:
@@ -171,7 +205,8 @@ npm run test:all   # Both suites
 The browser suite covers recipe creation, editing, deletion, search, multiple
 categories, EN/BG translations, cooking steps, shopping-cart persistence, and
 confirmation dialogs. Account tests cover registration, sign-in, sign-out,
-creator ownership, administrator permissions, forged server actions, private
+profile changes and photo uploads, backup exports and restores, creator ownership,
+administrator permissions, forged server actions, private
 notes and favorites, and rejected cross-origin mutations. Search tests cover
 Bulgarian ingredients, combined category/cook/time/favorites filters, sorting,
 resetting controls and mobile layout. It also checks that the global controls leave room for

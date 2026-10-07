@@ -10,6 +10,7 @@ import { getValidationKey } from "@/lib/form-validation";
 import type { CurrentUser } from "@/lib/permissions";
 import FormField, { formControlClassName } from "./FormField";
 import ImageUploadPreview from "./ImageUploadPreview";
+import RecipeBackupPanel from "./RecipeBackupPanel";
 
 export default function ProfileForm({ user }: { user: CurrentUser }) {
   const { t } = useLanguage();
@@ -155,6 +156,7 @@ export default function ProfileForm({ user }: { user: CurrentUser }) {
           </div>
         </div>
       </form>
+      {user.role === "admin" && <RecipeBackupPanel />}
     </main>
   );
 }

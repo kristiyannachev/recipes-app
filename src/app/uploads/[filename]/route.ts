@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { getUploadDirectory } from "@/lib/upload";
 
 export async function GET(
   _request: Request,
@@ -17,9 +18,7 @@ export async function GET(
     gif: "image/gif",
   };
   try {
-    const bytes = await readFile(
-      join(process.cwd(), "public/uploads", filename),
-    );
+    const bytes = await readFile(join(getUploadDirectory(), filename));
     return new Response(new Uint8Array(bytes), {
       headers: {
         "Content-Type": contentTypes[match[1].toLowerCase()],

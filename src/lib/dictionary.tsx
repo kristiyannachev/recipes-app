@@ -2,6 +2,31 @@ export type Language = "en" | "bg";
 
 export const dictionary = {
   en: {
+    "backup.title": "Recipe backups",
+    "backup.description":
+      "Download your recipe collection and uploaded recipe photos together in one compressed file.",
+    "backup.scope":
+      "Includes recipe fields, categories, dates, and creator emails. Accounts, passwords, profile photos, private notes, favorites, and shopping carts are not included. External image links are kept as links.",
+    "backup.download": "Download backup",
+    "backup.file": "Backup file",
+    "backup.limit": "Choose a .json.gz backup made by this app (up to 100 MB).",
+    "backup.preview": "Preview restore",
+    "backup.previewTitle": "Restore preview",
+    "backup.newCount": "New recipes: {count}",
+    "backup.updateCount": "Recipes to update: {count}",
+    "backup.photoCount": "Uploaded photos: {count}",
+    "backup.ownerCount": "Recipes assigned to your account: {count}",
+    "backup.externalCount": "External photo links: {count}",
+    "backup.merge":
+      "Matching recipe IDs will be updated, including their creator and photos. Missing recipes will be added. Other recipes, existing favorites, and notes will be kept. Creators are matched by email; recipes without a matching account belong to you.",
+    "backup.restore": "Restore backup",
+    "backup.confirmTitle": "Restore these recipes?",
+    "backup.done": "Backup restored successfully.",
+    "error.exportBackup":
+      "Could not create the backup. Check that all uploaded recipe photos still exist and the collection fits the backup size limits.",
+    "error.invalidBackup":
+      "This file is invalid, incomplete, too large, or uses an unsupported backup version.",
+    "error.restoreBackup": "Could not restore the backup. Please try again.",
     "filters.controls": "Recipe filters",
     "filters.categoryMatch": "Category matching",
     "filters.matchAll": "All selected categories",
@@ -160,6 +185,33 @@ export const dictionary = {
     "page.home": "Back to recipes",
   },
   bg: {
+    "backup.title": "Резервни копия на рецептите",
+    "backup.description":
+      "Изтеглете рецептите и качените им снимки заедно в един компресиран файл.",
+    "backup.scope":
+      "Включва полетата на рецептите, категориите, датите и имейлите на създателите. Не включва акаунти, пароли, профилни снимки, лични бележки, любими рецепти и колички. Външните снимки се запазват като връзки.",
+    "backup.download": "Изтегли резервно копие",
+    "backup.file": "Файл с резервно копие",
+    "backup.limit":
+      "Изберете резервно копие .json.gz от това приложение (до 100 MB).",
+    "backup.preview": "Преглед преди възстановяване",
+    "backup.previewTitle": "Преглед на възстановяването",
+    "backup.newCount": "Нови рецепти: {count}",
+    "backup.updateCount": "Рецепти за обновяване: {count}",
+    "backup.photoCount": "Качени снимки: {count}",
+    "backup.ownerCount": "Рецепти, приписани на вашия акаунт: {count}",
+    "backup.externalCount": "Връзки към външни снимки: {count}",
+    "backup.merge":
+      "Рецептите със съвпадащи идентификатори ще бъдат обновени, включително създателят и снимките им. Липсващите ще бъдат добавени. Останалите рецепти, съществуващите любими и бележки се запазват. Създателите се съпоставят по имейл; рецептите без съвпадащ акаунт ще принадлежат на вас.",
+    "backup.restore": "Възстанови резервното копие",
+    "backup.confirmTitle": "Да се възстановят ли тези рецепти?",
+    "backup.done": "Резервното копие е възстановено успешно.",
+    "error.exportBackup":
+      "Резервното копие не можа да бъде създадено. Проверете дали всички качени снимки съществуват и колекцията е в допустимите размери.",
+    "error.invalidBackup":
+      "Файлът е невалиден, непълен, твърде голям или използва неподдържана версия на резервното копие.",
+    "error.restoreBackup":
+      "Резервното копие не можа да бъде възстановено. Опитайте отново.",
     "filters.controls": "Филтри за рецепти",
     "filters.categoryMatch": "Съвпадение на категориите",
     "filters.matchAll": "Всички избрани категории",

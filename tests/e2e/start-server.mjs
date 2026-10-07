@@ -28,6 +28,7 @@ const env = {
   RECIPES_ADMIN_EMAIL: adminCredentials.email,
   RECIPES_ADMIN_PASSWORD: adminCredentials.password,
   RECIPES_DATABASE_URL: `file:${join(tempDir, "local.db")}`,
+  RECIPES_UPLOAD_DIR: join(tempDir, "uploads"),
   RECIPES_NEXT_DIST_DIR: ".next-e2e",
   RECIPES_TSCONFIG_PATH: "tsconfig.e2e.json",
 };
