@@ -8,11 +8,15 @@ test("recipe API rejects missing fields and invalid category payloads", async ({
     data: { title: "Incomplete" },
   });
   expect(missingFields.status()).toBe(400);
+  expect((await missingFields.json()).errorCode).toBe(
+    "error.recipeRequiredFields",
+  );
   for (const categories of ["Chicken", ["Unknown"], ["Пилешко"], [42], null]) {
     const response = await request.post("/api/recipes", {
       data: { title: "Invalid", ingredients: "One", steps: "Cook", categories },
     });
     expect(response.status()).toBe(400);
+    expect((await response.json()).errorCode).toBe("error.invalidCategories");
   }
   expect((await (await request.get("/api/recipes")).json()).length).toBe(
     before.length,

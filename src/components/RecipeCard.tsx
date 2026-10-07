@@ -6,8 +6,10 @@ import CookTime from "@/components/CookTime";
 import RecipeCategoryBadges from "@/components/RecipeCategoryBadges";
 import RecipeImage from "@/components/RecipeImage";
 import { getRecipeCategories } from "@/constants/categories";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function RecipeCard({ recipe }: { recipe: Recipe }) {
+  const { t } = useLanguage();
   const categories = getRecipeCategories(recipe.categories);
 
   return (
@@ -39,7 +41,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
             {!!recipe.cookMinutes && (
               <CookTime
                 minutes={recipe.cookMinutes}
-                label="min"
+                label={t("recipe.minutes")}
                 className="flex-shrink-0 flex items-center gap-1 text-sm font-medium text-white"
                 iconClassName="h-4 w-4 text-white"
               />

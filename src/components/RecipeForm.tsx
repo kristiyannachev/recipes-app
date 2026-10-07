@@ -2,12 +2,18 @@
 
 import type { Recipe } from "@prisma/client";
 import Link from "next/link";
-import type { ChangeEvent, FormEventHandler } from "react";
+import {
+  type ChangeEvent,
+  type FormEventHandler,
+  useEffect,
+  useRef,
+} from "react";
 import FormField, { formControlClassName } from "@/components/FormField";
 import ImageUploadPreview from "@/components/ImageUploadPreview";
 import RecipeCategoryPicker from "@/components/RecipeCategoryPicker";
 import { getRecipeCategories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getValidationKey } from "@/lib/form-validation";
 
 interface RecipeFormOptions {
   recipe?: Recipe;
@@ -20,7 +26,7 @@ interface RecipeFormOptions {
 
 type RecipeFormProps = RecipeFormOptions &
   (
-    | { action: (formData: FormData) => Promise<void>; onSubmit?: never }
+    | { action: (formData: FormData) => void | Promise<void>; onSubmit?: never }
     | { action?: never; onSubmit: FormEventHandler<HTMLFormElement> }
   );
 
@@ -35,7 +41,22 @@ export default function RecipeForm({
   uploading,
 }: RecipeFormProps) {
   const { t } = useLanguage();
+  const formRef = useRef<HTMLFormElement>(null);
   const isEdit = !!recipe;
+
+  useEffect(() => {
+    const fields = formRef.current?.querySelectorAll<
+      HTMLInputElement | HTMLTextAreaElement
+    >("input, textarea");
+    for (const field of fields ?? []) {
+      if (!field.validity.customError) continue;
+      field.setCustomValidity("");
+      if (!field.validity.valid)
+        field.setCustomValidity(
+          t(getValidationKey(field.validity, field.name)),
+        );
+    }
+  }, [t]);
 
   return (
     <main className="max-w-6xl mx-auto p-6">
@@ -61,8 +82,29 @@ export default function RecipeForm({
         </div>
       )}
       <form
+        ref={formRef}
         action={action}
         onSubmit={onSubmit}
+        onInvalidCapture={(event) => {
+          const field = event.target;
+          if (
+            field instanceof HTMLInputElement ||
+            field instanceof HTMLTextAreaElement
+          ) {
+            field.setCustomValidity("");
+            field.setCustomValidity(
+              t(getValidationKey(field.validity, field.name)),
+            );
+          }
+        }}
+        onInputCapture={(event) => {
+          const field = event.target;
+          if (
+            field instanceof HTMLInputElement ||
+            field instanceof HTMLTextAreaElement
+          )
+            field.setCustomValidity("");
+        }}
         className="bg-white p-8 rounded-3xl shadow-sm border border-stone-100"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

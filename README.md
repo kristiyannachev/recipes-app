@@ -48,11 +48,19 @@ In VS Code, open the Command Palette (**Cmd+Shift+P**) and choose
   Refresh to check that the checklist persists.
 - Edit a recipe and switch between English and Bulgarian in the navigation bar.
 
+Your EN/BG choice is saved in a browser cookie for one year and used when the
+server renders a page, so it survives refreshes and new visits. Interface labels,
+validation messages, save/upload/delete errors, and fallback pages follow that
+choice. Existing form values and cart selections stay in place when switching.
+Recipe titles, ingredients, and steps remain the text you entered; automatic
+recipe translation is a separate planned feature.
+
 ## Components and code
 
 - `src/app/`: routes, API handlers, and server-side recipe loading/saving.
 - `src/components/RecipeForm.tsx`: shared create/edit form layout and fields.
 - `src/components/NewRecipeForm.tsx`: create/upload requests, errors, and pending state.
+- `src/components/EditRecipeForm.tsx`: edit submission, translated errors, and pending state.
 - `src/components/FormField.tsx`: reusable labels and shared form-control styles.
 - `src/components/RecipeCategoryPicker.tsx`: category checkboxes shared by create/edit forms.
 - `src/components/RecipeCategoryBadges.tsx`: translated category badges shared by cards and details.
@@ -66,6 +74,8 @@ In VS Code, open the Command Palette (**Cmd+Shift+P**) and choose
   the cart page manages persistence and updates.
 - `src/types/shopping-cart.ts`: shared cart types, including older string ingredients.
 - `src/constants/categories.ts`: the category list shared by filters and forms.
+- `src/lib/dictionary.tsx`: English/Bulgarian interface strings and translation keys.
+- `src/contexts/LanguageContext.tsx`: language selection, cookie persistence, and document language.
 - `prisma/schema.prisma` and `prisma/migrations/`: database schema and history.
 
 Recipe categories are stored as a JSON array, supported by this project's
@@ -93,7 +103,8 @@ npm run test:all   # Both suites
 The browser suite covers recipe creation, editing, deletion, search, multiple
 categories, EN/BG translations, cooking steps, shopping-cart persistence, and
 confirmation dialogs. It also checks that the global controls leave room for
-page content at mobile and desktop widths.
+page content at mobile and desktop widths, language persistence before JavaScript
+loads, and translated validation and error messages during language changes.
 
 Each browser run creates a temporary SQLite database using the real migrations,
 builds into `.next-e2e`, and starts its own server on port **3100**. Your recipes,

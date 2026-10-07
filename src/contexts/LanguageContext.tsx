@@ -1,22 +1,50 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { dictionary, Language } from '@/lib/dictionary';
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import {
+  type Language,
+  type TranslationKey,
+  translate,
+} from "@/lib/dictionary";
+import { LANGUAGE_COOKIE } from "@/lib/language";
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: keyof typeof dictionary['en']) => string;
+  t: (key: TranslationKey) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined,
+);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('en');
+export function LanguageProvider({
+  children,
+  initialLanguage,
+}: {
+  children: ReactNode;
+  initialLanguage: Language;
+}) {
+  const [language, updateLanguage] = useState(initialLanguage);
 
-  const t = (key: keyof typeof dictionary['en']) => {
-    return dictionary[language][key] || key;
-  };
+  function setLanguage(nextLanguage: Language) {
+    // biome-ignore lint/suspicious/noDocumentCookie: Works in browsers where Cookie Store is unavailable, including local HTTP development.
+    document.cookie = `${LANGUAGE_COOKIE}=${nextLanguage}; Path=/; Max-Age=31536000; SameSite=Lax`;
+    updateLanguage(nextLanguage);
+  }
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    document.title = translate(language, "app.title");
+  }, [language]);
+
+  const t = (key: TranslationKey) => translate(language, key);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
@@ -28,7 +56,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 export function useLanguage() {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error('useLanguage must be used within a LanguageProvider');
+    throw new Error("useLanguage must be used within a LanguageProvider");
   }
   return context;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { type ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import RecipeImage from "@/components/RecipeImage";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -19,10 +19,13 @@ export default function ImageUploadPreview({
     initialImageUrl || null,
   );
   const { t } = useLanguage();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [fileName, setFileName] = useState("");
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setFileName(file.name);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
       onImageChange?.(e);
@@ -57,18 +60,37 @@ export default function ImageUploadPreview({
       />
       <RecipeImage
         src={previewUrl}
-        alt="Recipe preview"
+        alt={t("form.imagePreview")}
         className="rounded-3xl shadow-xl mb-6"
       />
       <input
+        ref={inputRef}
         id="recipe-image"
         type="file"
         name="image"
         accept="image/*"
         disabled={uploading}
         onChange={handleImageChange}
-        className="block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-700 hover:file:bg-orange-100 cursor-pointer"
+        hidden
       />
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          disabled={uploading}
+          onClick={() => inputRef.current?.click()}
+          aria-describedby="recipe-image-filename"
+          className="rounded-full bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700 hover:bg-orange-100 disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          {t("form.chooseImage")}
+        </button>
+        <span
+          id="recipe-image-filename"
+          className="text-sm text-stone-500 break-all"
+        >
+          {fileName ||
+            t(initialImageUrl ? "form.currentImage" : "form.noImage")}
+        </span>
+      </div>
       {uploading && (
         <p className="mt-2 text-sm text-orange-600 font-medium animate-pulse">
           {t("form.uploading")}

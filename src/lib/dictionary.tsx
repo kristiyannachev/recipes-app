@@ -4,6 +4,7 @@ export const dictionary = {
   en: {
     "app.title": "Nati & Kris' Recipes",
     "nav.newRecipe": "+ New Recipe",
+    "nav.controls": "App controls",
     "cart.title": "Shopping Cart",
     "cart.empty": "Your cart is empty.",
     "cart.browse": "Browse Recipes",
@@ -48,8 +49,10 @@ export const dictionary = {
       "Are you sure you want to delete this recipe? This action cannot be undone.",
     "recipe.cancel": "Cancel",
     "recipe.confirmDelete": "Confirm Delete",
+    "recipe.deleting": "Deleting...",
     "recipe.source": "View Original Recipe Source",
     "recipe.cookTime": "MIN COOK TIME",
+    "recipe.minutes": "min",
     "recipe.startCooking": "🧑‍🍳 Start Cooking",
     "recipe.nextStep": "Next Step",
     "recipe.finish": "Finish",
@@ -69,10 +72,35 @@ export const dictionary = {
     "form.create": "Create Recipe",
     "form.creating": "Creating Recipe...",
     "form.uploading": "Uploading image...",
+    "form.saving": "Saving Changes...",
+    "form.chooseImage": "Choose image",
+    "form.noImage": "No image selected",
+    "form.currentImage": "Current image",
+    "form.imagePreview": "Recipe preview",
+    "validation.required": "Please fill out this field.",
+    "validation.url": "Please enter a valid URL.",
+    "validation.cookTime":
+      "Please enter a whole number of minutes greater than zero.",
+    "validation.invalid": "Please check this value.",
+    "error.recipeRequiredFields":
+      "Please enter a title, ingredients, and steps.",
+    "error.invalidCategories": "Please choose valid recipe categories.",
+    "error.createRecipe": "Could not create the recipe. Please try again.",
+    "error.saveRecipe": "Could not save the changes. Please try again.",
+    "error.uploadImage": "Could not upload the image. Please try again.",
+    "error.imageRequired": "Please choose an image to upload.",
+    "error.deleteRecipe": "Could not delete the recipe. Please try again.",
+    "page.notFoundTitle": "Page not found",
+    "page.notFoundMessage": "This page may have been moved or deleted.",
+    "page.errorTitle": "Something went wrong",
+    "page.errorMessage": "We could not load this page. Please try again.",
+    "page.retry": "Try again",
+    "page.home": "Back to recipes",
   },
   bg: {
     "app.title": "Рецептите на Нати и Крис",
     "nav.newRecipe": "+ Нова Рецепта",
+    "nav.controls": "Управление на приложението",
     "cart.title": "Количка",
     "cart.empty": "Количката е празна.",
     "cart.browse": "Разгледай рецепти",
@@ -117,8 +145,10 @@ export const dictionary = {
       "Сигурни ли сте, че искате да изтриете тази рецепта? Това действие е необратимо.",
     "recipe.cancel": "Отказ",
     "recipe.confirmDelete": "Потвърди изтриването",
+    "recipe.deleting": "Изтриване...",
     "recipe.source": "Виж оригиналния източник",
     "recipe.cookTime": "МИН ГОТВЕНЕ",
+    "recipe.minutes": "мин",
     "recipe.startCooking": "🧑‍🍳 Започни готвене",
     "recipe.nextStep": "Следваща стъпка",
     "recipe.finish": "Приключи",
@@ -138,5 +168,44 @@ export const dictionary = {
     "form.create": "Създай рецепта",
     "form.creating": "Създаване на рецепта...",
     "form.uploading": "Качване на снимка...",
+    "form.saving": "Запазване на промените...",
+    "form.chooseImage": "Избери снимка",
+    "form.noImage": "Няма избрана снимка",
+    "form.currentImage": "Текуща снимка",
+    "form.imagePreview": "Преглед на снимката",
+    "validation.required": "Моля, попълнете това поле.",
+    "validation.url": "Моля, въведете валиден URL адрес.",
+    "validation.cookTime":
+      "Моля, въведете цяло число минути, по-голямо от нула.",
+    "validation.invalid": "Моля, проверете тази стойност.",
+    "error.recipeRequiredFields": "Моля, въведете заглавие, съставки и стъпки.",
+    "error.invalidCategories": "Моля, изберете валидни категории за рецептата.",
+    "error.createRecipe":
+      "Рецептата не можа да бъде създадена. Моля, опитайте отново.",
+    "error.saveRecipe":
+      "Промените не можаха да бъдат запазени. Моля, опитайте отново.",
+    "error.uploadImage":
+      "Снимката не можа да бъде качена. Моля, опитайте отново.",
+    "error.imageRequired": "Моля, изберете снимка за качване.",
+    "error.deleteRecipe":
+      "Рецептата не можа да бъде изтрита. Моля, опитайте отново.",
+    "page.notFoundTitle": "Страницата не е намерена",
+    "page.notFoundMessage": "Страницата може да е преместена или изтрита.",
+    "page.errorTitle": "Възникна грешка",
+    "page.errorMessage":
+      "Страницата не можа да бъде заредена. Моля, опитайте отново.",
+    "page.retry": "Опитай отново",
+    "page.home": "Обратно към рецептите",
   },
 };
+
+export type TranslationKey = keyof typeof dictionary.en;
+
+export function translate(language: Language, key: TranslationKey): string {
+  // Adding an English interface string also requires its Bulgarian translation.
+  const translations: Record<
+    Language,
+    Record<TranslationKey, string>
+  > = dictionary;
+  return translations[language][key];
+}

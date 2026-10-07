@@ -4,11 +4,11 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import ShoppingCartIcon from "./ShoppingCartIcon";
 
 export default function NavBar() {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   return (
     <nav
-      aria-label="App controls"
+      aria-label={t("nav.controls")}
       className="max-w-7xl mx-auto w-full px-6 pt-6 flex items-center justify-end gap-3"
     >
       <div className="bg-white rounded-full shadow-xl border border-stone-100 p-1 flex">

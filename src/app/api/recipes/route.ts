@@ -28,7 +28,10 @@ export async function POST(req: Request) {
 
     if (!title || !ingredients || !steps) {
       return NextResponse.json(
-        { error: "title, ingredients, and steps required" },
+        {
+          error: "title, ingredients, and steps required",
+          errorCode: "error.recipeRequiredFields",
+        },
         { status: 400 },
       );
     }
@@ -38,7 +41,10 @@ export async function POST(req: Request) {
       selectedCategories = parseRecipeCategories(categories);
     } catch {
       return NextResponse.json(
-        { error: "Categories must be an array of supported category names." },
+        {
+          error: "Categories must be an array of supported category names.",
+          errorCode: "error.invalidCategories",
+        },
         { status: 400 },
       );
     }
@@ -60,6 +66,9 @@ export async function POST(req: Request) {
     return NextResponse.json(recipe, { status: 201 });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Server error", errorCode: "error.createRecipe" },
+      { status: 500 },
+    );
   }
 }

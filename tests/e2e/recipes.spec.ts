@@ -139,8 +139,8 @@ test("a failed save keeps form values and permits retry", async ({ page }) => {
     .getByRole("button", { name: "Create Recipe", exact: true })
     .click();
   await expect(
-    page.getByRole("alert").filter({ hasText: "Please try again" }),
-  ).toHaveText("Please try again");
+    page.getByRole("alert").filter({ hasText: "Could not create the recipe" }),
+  ).toHaveText("Could not create the recipe. Please try again.");
   await expect(page.getByLabel("Title", { exact: true })).toHaveValue(title);
   await expect(
     page.getByRole("checkbox", { name: "Chicken", exact: true }),

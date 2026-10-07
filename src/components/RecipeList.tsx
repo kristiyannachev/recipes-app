@@ -32,6 +32,7 @@ export default function RecipeList({ recipes }: RecipeListProps) {
         <input
           type="text"
           placeholder={t("home.searchPlaceholder")}
+          aria-label={t("home.searchPlaceholder")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white text-lg"

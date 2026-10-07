@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useLanguage } from "@/contexts/LanguageContext";
 import type { CartItem } from "@/types/shopping-cart";
 
 interface ShoppingCartRecipeProps {
@@ -14,6 +15,7 @@ export default function ShoppingCartRecipe({
   onRemove,
   onToggleIngredient,
 }: ShoppingCartRecipeProps) {
+  const { t } = useLanguage();
   return (
     <div className="bg-white p-6 rounded-3xl shadow-sm border border-stone-100">
       <div className="flex justify-between items-start mb-4">
@@ -30,7 +32,7 @@ export default function ShoppingCartRecipe({
           onClick={() => onRemove(item.recipeId)}
           className="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-1 rounded-full hover:bg-red-50 transition-colors"
         >
-          Remove
+          {t("cart.remove")}
         </button>
       </div>
       <ul className="space-y-3">
