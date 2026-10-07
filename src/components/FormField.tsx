@@ -12,7 +12,7 @@ export default function FormField({
   children,
 }: FormFieldProps) {
   return (
-    <div>
+    <div className="min-w-0">
       <label
         htmlFor={htmlFor}
         className="block text-sm font-bold text-emerald-700 mb-2"

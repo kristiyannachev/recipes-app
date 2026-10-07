@@ -1,14 +1,14 @@
 "use client";
 
-import type { Recipe } from "@prisma/client";
 import Link from "next/link";
 import CookTime from "@/components/CookTime";
 import RecipeCategoryBadges from "@/components/RecipeCategoryBadges";
 import RecipeImage from "@/components/RecipeImage";
 import { getRecipeCategories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { RecipeListItem } from "@/types/recipe";
 
-export default function RecipeCard({ recipe }: { recipe: Recipe }) {
+export default function RecipeCard({ recipe }: { recipe: RecipeListItem }) {
   const { t } = useLanguage();
   const categories = getRecipeCategories(recipe.categories);
 
@@ -33,6 +33,11 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
         >
           {recipe.title}
         </h2>
+        {recipe.owner && (
+          <p className="mt-1 text-xs text-white break-words">
+            {t("recipe.introducedBy")}: {recipe.owner.name}
+          </p>
+        )}
         <div className="flex-grow mt-2">
           <div className="flex justify-between items-start">
             <p className="text-sm text-white line-clamp-2 pr-2">

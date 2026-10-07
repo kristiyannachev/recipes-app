@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/session";
 export default async function Home() {
   const recipes = await prisma.recipe.findMany({
     orderBy: { createdAt: "desc" },
+    include: { owner: { select: { id: true, name: true } } },
   });
 
   const user = await getCurrentUser();

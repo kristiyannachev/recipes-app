@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { Page } from "@playwright/test";
+import { dictionary } from "../../src/lib/dictionary";
 import { expect, type TestRecipe, test } from "./fixtures";
 
 async function fillNewRecipe(page: Page, title: string) {
@@ -102,7 +103,9 @@ test("search and filters find recipes assigned to more than one category", async
     categories: ["Cakes", "Desserts"],
   });
   await page.goto("/");
-  await page.getByPlaceholder("Search recipes...").fill(prefix);
+  await page
+    .getByPlaceholder(dictionary.en["home.searchPlaceholder"])
+    .fill(prefix);
   await expect(
     page.getByRole("heading", { name: soup.title, exact: true }),
   ).toBeVisible();
@@ -122,7 +125,9 @@ test("search and filters find recipes assigned to more than one category", async
   await expect(
     page.getByRole("heading", { name: cake.title, exact: true }),
   ).toBeVisible();
-  await page.getByPlaceholder("Search recipes...").fill("no-such-recipe-title");
+  await page
+    .getByPlaceholder(dictionary.en["home.searchPlaceholder"])
+    .fill("no-such-recipe-title");
   await expect(
     page.getByText("No recipes found.", { exact: true }),
   ).toBeVisible();

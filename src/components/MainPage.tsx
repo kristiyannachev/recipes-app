@@ -1,15 +1,15 @@
 "use client";
 
-import type { Recipe } from "@prisma/client";
 import Link from "next/link";
 import RecipeList from "@/components/RecipeList";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { RecipeListItem } from "@/types/recipe";
 
 export default function MainPage({
   recipes,
   favoriteIds,
 }: {
-  recipes: Recipe[];
+  recipes: RecipeListItem[];
   favoriteIds: string[];
 }) {
   const { t } = useLanguage();

@@ -76,8 +76,8 @@ and stable across restarts; do not commit `.env.local`.
 - Open a recipe, or use **+ New Recipe** to create one. Enter ingredients and
   cooking steps on separate lines; choose any number of categories and optionally
   upload a photo. Selected category chips turn green.
-- Search by title and select a category on the home page. A recipe tagged with
-  both Chicken and Soups appears under either filter.
+- Search by title or ingredients and select categories on the home page.
+  Combine them with cook, cooking-time and favorites filters, then choose a sort order.
 - Open a recipe and use **Start Cooking** to advance through its steps.
 - Choose **Add to Cart**, open the cart icon, and tick ingredients as you shop.
   Refresh to check that the checklist persists.
@@ -89,6 +89,30 @@ validation messages, save/upload/delete errors, and fallback pages follow that
 choice. Existing form values and cart selections stay in place when switching.
 Recipe titles, ingredients, and steps remain the text you entered; automatic
 recipe translation is a separate planned feature.
+
+## Search and filtering
+
+Search checks recipe titles and ingredients, ignoring case and extra whitespace.
+Every search word must match somewhere in those fields: `chicken rice` can find
+"Chicken soup" with rice listed in its ingredients. Bulgarian text is supported;
+recipe contents are searched as entered.
+
+Select multiple category chips. **All selected categories** finds recipes with
+every selected category, such as Chicken + Soups. Choose **Any selected category**
+to include recipes with at least one selection. Clicking a selected chip removes
+it; **All** clears just the category selection.
+
+The cook filter uses the account that created the recipe. Older recipes can be
+found under **No creator assigned**. Cooking-time limits are inclusive (15, 30,
+45, 60 or 120 minutes); recipes without a recorded duration have their own
+**Time not specified** option and are excluded from maximum-time filters.
+Signed-in users can combine these controls with **My favorites only**.
+
+Sort by newest, oldest, title in either direction, or shortest/longest cooking
+time. Missing durations always appear last when sorting by cooking time.
+The result count updates as filters change; **Reset filters** clears the search
+and selections and restores newest-first sorting. Language changes preserve
+selections. Guests can use every control except personal favorites.
 
 ## Components and code
 
@@ -104,7 +128,11 @@ recipe translation is a separate planned feature.
 - `src/components/FormField.tsx`: reusable labels and shared form-control styles.
 - `src/components/RecipeCategoryPicker.tsx`: category checkboxes shared by create/edit forms.
 - `src/components/RecipeCategoryBadges.tsx`: translated category badges shared by cards and details.
-- `src/components/RecipeList.tsx`: search and category filtering.
+- `src/components/RecipeList.tsx`: recipe results and filter state.
+- `src/components/RecipeFilters.tsx`: translated search, category, cook, duration,
+  favorites and sorting controls.
+- `src/lib/recipe-search.ts`: shared filtering and sorting logic.
+- `src/types/recipe.ts`: list data with public creator names.
 - `src/components/RecipeCard.tsx`: one recipe in the list.
 - `src/components/RecipeImage.tsx`: images and the empty-image placeholder,
   shared by cards, details, and upload previews.
@@ -144,7 +172,9 @@ The browser suite covers recipe creation, editing, deletion, search, multiple
 categories, EN/BG translations, cooking steps, shopping-cart persistence, and
 confirmation dialogs. Account tests cover registration, sign-in, sign-out,
 creator ownership, administrator permissions, forged server actions, private
-notes and favorites, and rejected cross-origin mutations. It also checks that the global controls leave room for
+notes and favorites, and rejected cross-origin mutations. Search tests cover
+Bulgarian ingredients, combined category/cook/time/favorites filters, sorting,
+resetting controls and mobile layout. It also checks that the global controls leave room for
 page content at mobile and desktop widths, language persistence before JavaScript
 loads, and translated validation and error messages during language changes.
 

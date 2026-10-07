@@ -1,74 +1,47 @@
 "use client";
 
-import type { Recipe } from "@prisma/client";
 import { useState } from "react";
 import RecipeCard from "@/components/RecipeCard";
-import { getRecipeCategories } from "@/constants/categories";
+import RecipeFilters from "@/components/RecipeFilters";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUser } from "@/contexts/UserContext";
-import CategoryFilter from "./CategoryFilter";
+import {
+  defaultRecipeFilters,
+  filterAndSortRecipes,
+} from "@/lib/recipe-search";
+import type { RecipeListItem } from "@/types/recipe";
 
 interface RecipeListProps {
-  recipes: Recipe[];
+  recipes: RecipeListItem[];
   favoriteIds: string[];
 }
 
 export default function RecipeList({ recipes, favoriteIds }: RecipeListProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const { t } = useLanguage();
+  const [filters, setFilters] = useState(defaultRecipeFilters);
+  const { t, language } = useLanguage();
   const user = useUser();
-  const [favoritesOnly, setFavoritesOnly] = useState(false);
-
-  const filteredRecipes = recipes.filter((recipe) => {
-    const matchesCategory =
-      selectedCategory === null ||
-      getRecipeCategories(recipe.categories).includes(selectedCategory);
-    const matchesSearch = recipe.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    return (
-      matchesCategory &&
-      matchesSearch &&
-      (!user || !favoritesOnly || favoriteIds.includes(recipe.id))
-    );
-  });
+  const filteredRecipes = filterAndSortRecipes(
+    recipes,
+    { ...filters, favoritesOnly: !!user && filters.favoritesOnly },
+    favoriteIds,
+    language,
+  );
 
   return (
     <>
-      <div className="mb-8">
-        <input
-          type="text"
-          placeholder={t("home.searchPlaceholder")}
-          aria-label={t("home.searchPlaceholder")}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white text-lg"
-        />
-      </div>
-
-      {user && (
-        <label className="flex items-center gap-2 mb-5 text-emerald-700 font-bold">
-          <input
-            type="checkbox"
-            checked={favoritesOnly}
-            onChange={(event) => setFavoritesOnly(event.target.checked)}
-          />
-          {t("personal.onlyFavorites")}
-        </label>
-      )}
-
-      <CategoryFilter
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
+      <RecipeFilters
+        recipes={recipes}
+        filters={filters}
+        onChange={setFilters}
+        onReset={() => setFilters(defaultRecipeFilters())}
+        resultCount={filteredRecipes.length}
       />
-
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {filteredRecipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
         {filteredRecipes.length === 0 && (
-          <p className="text-emerald-700 text-center py-10">
+          <p className="col-span-full text-emerald-700 text-center py-10">
             {t("home.noSearchResults")}
           </p>
         )}
