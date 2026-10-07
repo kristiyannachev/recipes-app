@@ -21,6 +21,30 @@ export const categories = [
 
 export type Category = (typeof categories)[number];
 
+const categoryEmojis: Record<Category, string> = {
+  Breakfast: "🍳",
+  Salads: "🥗",
+  Soups: "🍲",
+  Chicken: "🍗",
+  Pork: "🥓",
+  "Beef & Veal": "🥩",
+  "Fish & Seafood": "🐟",
+  "Other Meat": "🍖",
+  Vegetarian: "🥦",
+  "Side Dishes": "🍚",
+  "Bread & Pastries": "🥐",
+  Cakes: "🎂",
+  Desserts: "🍨",
+  Drinks: "🥤",
+  Sauces: "🥣",
+  Others: "🍽️",
+};
+
+export function getCategoryEmoji(category: string): string {
+  const knownCategory = categories.find((value) => value === category);
+  return knownCategory ? categoryEmojis[knownCategory] : "🏷️";
+}
+
 type TranslationKey = keyof typeof dictionary.en;
 
 const categoryTranslationKeys: Record<

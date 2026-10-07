@@ -1,7 +1,8 @@
 "use client";
 
-import { categories, getCategoryLabel } from "@/constants/categories";
+import { categories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
+import CategoryLabel from "./CategoryLabel";
 
 interface CategoryFilterProps {
   selectedCategories: string[];
@@ -45,7 +46,7 @@ export default function CategoryFilter({
               : "bg-white text-stone-600 border-stone-200 hover:border-emerald-400 hover:text-emerald-700 hover:bg-emerald-50"
           }`}
         >
-          {getCategoryLabel(category, t)}
+          <CategoryLabel category={category} />
         </button>
       ))}
     </div>

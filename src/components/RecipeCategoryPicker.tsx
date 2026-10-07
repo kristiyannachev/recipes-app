@@ -1,7 +1,8 @@
 "use client";
 
-import { categories, getCategoryLabel } from "@/constants/categories";
+import { categories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
+import CategoryLabel from "./CategoryLabel";
 
 export default function RecipeCategoryPicker({
   defaultSelected = [],
@@ -27,7 +28,7 @@ export default function RecipeCategoryPicker({
               className="peer sr-only"
             />
             <span className="block px-4 py-2 rounded-full text-sm font-medium border border-stone-200 bg-white text-stone-600 transition-colors hover:border-emerald-400 peer-checked:bg-emerald-600 peer-checked:text-white peer-checked:border-emerald-600 peer-focus-visible:ring-2 peer-focus-visible:ring-orange-400 peer-focus-visible:ring-offset-2">
-              {getCategoryLabel(category, t)}
+              <CategoryLabel category={category} />
             </span>
           </label>
         ))}
