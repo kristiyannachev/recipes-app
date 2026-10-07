@@ -1,59 +1,30 @@
-import { existsSync } from "fs";
-import { mkdir, writeFile } from "fs/promises";
-import { type NextRequest, NextResponse } from "next/server";
-import { join } from "path";
+import { NextResponse } from "next/server";
+import { isTrustedMutation } from "@/lib/request-security";
+import { getCurrentUser } from "@/lib/session";
+import { saveRecipeImage } from "@/lib/upload";
 
-export async function POST(request: NextRequest) {
-  const data = await request.formData();
-  const file: File | null = data.get("file") as unknown as File;
-
-  if (!file) {
+export async function POST(request: Request) {
+  if (!isTrustedMutation(request))
+    return NextResponse.json({ errorCode: "error.forbidden" }, { status: 403 });
+  if (!(await getCurrentUser()))
     return NextResponse.json(
-      {
-        success: false,
-        error: "No file found",
-        errorCode: "error.imageRequired",
-      },
+      { errorCode: "error.signInRequired" },
+      { status: 401 },
+    );
+  const data = await request.formData();
+  const file = data.get("file");
+  if (!(file instanceof File))
+    return NextResponse.json(
+      { errorCode: "error.imageRequired" },
+      { status: 400 },
+    );
+  try {
+    const url = await saveRecipeImage(file);
+    return NextResponse.json({ success: true, url });
+  } catch {
+    return NextResponse.json(
+      { errorCode: "error.uploadImage" },
       { status: 400 },
     );
   }
-
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-
-  const uploadDir = join(process.cwd(), "public/uploads");
-
-  try {
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-  } catch (error) {
-    console.error("Error creating upload directory:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Failed to create upload directory",
-        errorCode: "error.uploadImage",
-      },
-      { status: 500 },
-    );
-  }
-
-  const filename = `${Date.now()}-${file.name.replace(/\s/g, "_")}`;
-  const path = join(uploadDir, filename);
-
-  try {
-    await writeFile(path, buffer);
-  } catch (error) {
-    console.error("Error saving uploaded image:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Image upload failed",
-        errorCode: "error.uploadImage",
-      },
-      { status: 500 },
-    );
-  }
-  return NextResponse.json({ success: true, url: `/uploads/${filename}` });
 }

@@ -7,13 +7,14 @@ database through Prisma; the cart stays in your browser’s local storage.
 ## Quick start on macOS
 
 1. Install [Node.js](https://nodejs.org/en/download) if needed. This project’s
-   Next.js version requires Node **20.9 or newer**. Check with `node --version`.
+   authentication dependencies require Node **20.19 or newer**. Check with `node --version`.
 2. Open Terminal and run:
 
    ```bash
    cd /Users/kristiyan.nachev/Projects/recipes-app
    npm ci
    npm run setup
+   npm run admin:create
    npm run dev
    ```
 
@@ -22,8 +23,14 @@ database through Prisma; the cart stays in your browser’s local storage.
    **Ctrl+C**. Changes to source files appear automatically while it is running.
 
 `npm run setup` generates Prisma Client and applies the committed database
-migrations. No database server, API keys, or `.env` file are needed. SQLite data
-lives in `prisma/dev.db`; uploaded images live in `public/uploads`.
+migrations and creates a random authentication secret in ignored `.env.local`.
+`npm run admin:create` asks for your name, email and a hidden password (at least
+12 characters). This creates your administrator account; public registration
+always creates a regular account. No external database server or API keys are needed. SQLite data
+lives in ignored `prisma/local.db`; uploaded images live in `public/uploads`.
+On the first setup, existing recipes are copied from the legacy `prisma/dev.db`
+snapshot into `prisma/local.db`; the original stays unchanged. Later setup runs
+preserve the local database, including your accounts and notes.
 The initial run needs internet access to install dependencies and fetch the
 Google fonts used by the app.
 
@@ -36,6 +43,34 @@ Client before running. If your editor still reports an old model field such as
 In VS Code, open the Command Palette (**Cmd+Shift+P**) and choose
 **TypeScript: Restart TS Server** to refresh the editor's cached types.
 
+## Accounts, ownership and personal recipes
+
+- Everyone, including guests, can browse recipes, follow cooking steps and use the cart.
+- Sign in with email and password to create recipes. The app records the creator
+  automatically and displays their name on the recipe.
+- A cook can edit their own recipes. Your administrator account can edit any
+  recipe and is the only account allowed to delete recipes. These rules are
+  checked on the server as well as reflected in the interface.
+- Existing recipes have no assigned creator and remain editable by the administrator.
+- On a recipe, use **Add to favorites** or save **Personal notes**. The home-page
+  **My favorites only** filter combines with search and category filters.
+  Favorites and notes belong to your account; other users, including the
+  administrator, cannot view your notes through the app. The cart remains local
+  to the browser and is not synchronized between accounts.
+- Sign out from the navigation bar. A logged-out session cannot save changes.
+
+For an existing checkout, stop the dev server, run `npm run setup`, then
+`npm run admin:create`, and restart with `npm run dev`.
+The account command exits without changing anything if an administrator already exists.
+Create the administrator before registering that same email through the website.
+
+Authentication uses [Better Auth](https://better-auth.com/docs/authentication/email-password)
+with password hashing, database sessions, HTTP-only cookies and request rate limits.
+Email verification and emailed password recovery are not configured in this version.
+For another port or a hosted deployment, set `BETTER_AUTH_URL` in `.env.local`
+to the actual app URL (use HTTPS when hosted). Keep `BETTER_AUTH_SECRET` private
+and stable across restarts; do not commit `.env.local`.
+
 ## Try the main flows
 
 - Open a recipe, or use **+ New Recipe** to create one. Enter ingredients and
@@ -46,7 +81,7 @@ In VS Code, open the Command Palette (**Cmd+Shift+P**) and choose
 - Open a recipe and use **Start Cooking** to advance through its steps.
 - Choose **Add to Cart**, open the cart icon, and tick ingredients as you shop.
   Refresh to check that the checklist persists.
-- Edit a recipe and switch between English and Bulgarian in the navigation bar.
+- Edit a recipe you created and switch between English and Bulgarian in the navigation bar.
 
 Your EN/BG choice is saved in a browser cookie for one year and used when the
 server renders a page, so it survives refreshes and new visits. Interface labels,
@@ -58,6 +93,11 @@ recipe translation is a separate planned feature.
 ## Components and code
 
 - `src/app/`: routes, API handlers, and server-side recipe loading/saving.
+- `src/lib/auth.ts`, `session.ts`, and `permissions.ts`: authentication configuration,
+  current-user loading and ownership rules.
+- `src/components/AuthForm.tsx`: translated sign-in and registration forms.
+- `src/components/RecipePersonalDetails.tsx`: private favorites and notes.
+- `scripts/`: private local setup and administrator creation.
 - `src/components/RecipeForm.tsx`: shared create/edit form layout and fields.
 - `src/components/NewRecipeForm.tsx`: create/upload requests, errors, and pending state.
 - `src/components/EditRecipeForm.tsx`: edit submission, translated errors, and pending state.
@@ -102,7 +142,9 @@ npm run test:all   # Both suites
 
 The browser suite covers recipe creation, editing, deletion, search, multiple
 categories, EN/BG translations, cooking steps, shopping-cart persistence, and
-confirmation dialogs. It also checks that the global controls leave room for
+confirmation dialogs. Account tests cover registration, sign-in, sign-out,
+creator ownership, administrator permissions, forged server actions, private
+notes and favorites, and rejected cross-origin mutations. It also checks that the global controls leave room for
 page content at mobile and desktop widths, language persistence before JavaScript
 loads, and translated validation and error messages during language changes.
 
@@ -130,7 +172,8 @@ temporary SQLite database, including category preservation, multiple-category
 saves, edits, and clearing all categories. It leaves your local recipes unchanged.
 
 `npm start` serves the production build; use `npm run dev` for everyday development.
-If port 3000 is occupied, run `npm run dev -- --port 3001` and open
+If port 3000 is occupied, set `BETTER_AUTH_URL=http://localhost:3001` in `.env.local`, then run
+`npm run dev -- --port 3001` and open
 [http://localhost:3001](http://localhost:3001).
 
 Framework setup details: [Next.js installation](https://nextjs.org/docs/app/getting-started/installation).

@@ -5,6 +5,8 @@ export function getValidationKey(
   name: string,
 ): TranslationKey {
   if (validity.valueMissing) return "validation.required";
+  if (name === "email" && validity.typeMismatch) return "validation.email";
+  if (name === "password" && validity.tooShort) return "validation.password";
   if (name === "sourceUrl" && validity.typeMismatch) return "validation.url";
   if (name === "cookMinutes") return "validation.cookTime";
   return "validation.invalid";

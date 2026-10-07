@@ -10,17 +10,32 @@ import RecipeIngredients from "@/components/RecipeIngredients";
 import RecipeSteps from "@/components/RecipeSteps";
 import { getRecipeCategories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUser } from "@/contexts/UserContext";
+import RecipePersonalDetails, {
+  type PersonalDetails,
+} from "./RecipePersonalDetails";
 
 interface RecipeDetailProps {
   recipe: Recipe;
+  canEdit: boolean;
+  canDelete: boolean;
+  ownerName: string | null;
+  preference: PersonalDetails | null;
+  personalUserId: string | null;
   deleteAction: () => Promise<void>;
 }
 
 export default function RecipeDetail({
   recipe,
   deleteAction,
+  canEdit,
+  canDelete,
+  ownerName,
+  preference,
+  personalUserId,
 }: RecipeDetailProps) {
   const { t } = useLanguage();
+  const user = useUser();
   const categories = getRecipeCategories(recipe.categories);
 
   return (
@@ -33,13 +48,15 @@ export default function RecipeDetail({
           &larr; {t("recipe.back")}
         </Link>
         <div className="flex gap-4">
-          <Link
-            href={`/recipes/${recipe.id}/edit`}
-            className="bg-emerald-600 text-white px-6 py-3 rounded-full font-medium hover:bg-emerald-700 transition shadow-sm hover:shadow"
-          >
-            {t("recipe.edit")}
-          </Link>
-          <DeleteRecipeButton deleteAction={deleteAction} />
+          {canEdit && (
+            <Link
+              href={`/recipes/${recipe.id}/edit`}
+              className="bg-emerald-600 text-white px-6 py-3 rounded-full font-medium hover:bg-emerald-700 transition shadow-sm hover:shadow"
+            >
+              {t("recipe.edit")}
+            </Link>
+          )}
+          {canDelete && <DeleteRecipeButton deleteAction={deleteAction} />}
         </div>
       </div>
 
@@ -50,6 +67,12 @@ export default function RecipeDetail({
             <h1 className="text-5xl font-extrabold text-emerald-700 mb-8 tracking-tight break-words">
               {recipe.title}
             </h1>
+
+            {ownerName && (
+              <p className="text-emerald-700 mb-4">
+                {t("recipe.introducedBy")}: {ownerName}
+              </p>
+            )}
 
             {recipe.description && (
               <p className="text-xl text-emerald-600 mb-6 leading-relaxed break-words">
@@ -98,6 +121,11 @@ export default function RecipeDetail({
             />
 
             <RecipeSteps steps={recipe.steps} />
+            <RecipePersonalDetails
+              key={`${recipe.id}:${user?.id ?? "guest"}:${personalUserId}`}
+              recipeId={recipe.id}
+              initial={user?.id === personalUserId ? preference : null}
+            />
           </div>
         </div>
 

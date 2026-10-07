@@ -4,8 +4,10 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { UserProvider } from "@/contexts/UserContext";
 import { translate } from "@/lib/dictionary";
 import { getLanguage, LANGUAGE_COOKIE } from "@/lib/language";
+import { getCurrentUser } from "@/lib/session";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,14 +30,17 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const language = getLanguage((await cookies()).get(LANGUAGE_COOKIE)?.value);
+  const user = await getCurrentUser();
   return (
     <html lang={language}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased !bg-orange-200 !text-stone-800 min-h-screen`}
       >
         <LanguageProvider initialLanguage={language}>
-          <NavBar />
-          {children}
+          <UserProvider value={user}>
+            <NavBar />
+            {children}
+          </UserProvider>
         </LanguageProvider>
       </body>
     </html>

@@ -62,7 +62,7 @@ test("migration preserves recipes and category membership through create and edi
       { stdio: "pipe", encoding: "utf8" },
     );
   const prisma = new PrismaClient({
-    datasources: { db: { url: `file:${join(tempDir, "dev.db")}` } },
+    datasources: { db: { url: `file:${join(tempDir, "local.db")}` } },
   });
 
   try {
@@ -71,7 +71,7 @@ test("migration preserves recipes and category membership through create and edi
       join(projectDir, "prisma/schema.prisma"),
       "utf8",
     );
-    writeFileSync(join(tempDir, "dev.db"), "");
+    writeFileSync(join(tempDir, "local.db"), "");
     writeFileSync(
       schemaPath,
       schema.replace(
@@ -81,7 +81,7 @@ test("migration preserves recipes and category membership through create and edi
     );
     mkdirSync(join(tempDir, "migrations"));
     for (const entry of readdirSync(join(projectDir, "prisma/migrations"))) {
-      if (entry !== migrationName)
+      if (entry < migrationName || entry === "migration_lock.toml")
         cpSync(
           join(projectDir, "prisma/migrations", entry),
           join(tempDir, "migrations", entry),
@@ -117,11 +117,14 @@ test("migration preserves recipes and category membership through create and edi
       'SELECT "id", "title", "description", "ingredients", "steps", "cookMinutes", "imageUrl", "sourceUrl", "createdAt" FROM "Recipe" ORDER BY "id"';
     const before = await prisma.$queryRawUnsafe(recipeFields);
 
-    cpSync(
-      join(projectDir, "prisma/migrations", migrationName),
-      join(tempDir, "migrations", migrationName),
-      { recursive: true },
-    );
+    for (const entry of readdirSync(join(projectDir, "prisma/migrations"))) {
+      if (entry >= migrationName && entry !== "migration_lock.toml")
+        cpSync(
+          join(projectDir, "prisma/migrations", entry),
+          join(tempDir, "migrations", entry),
+          { recursive: true },
+        );
+    }
     writeFileSync(schemaPath, schema);
     migrate();
     assert.deepEqual(await prisma.$queryRawUnsafe(recipeFields), before);
@@ -129,6 +132,7 @@ test("migration preserves recipes and category membership through create and edi
     const recipes = await prisma.recipe.findMany({ orderBy: { id: "asc" } });
     assert.equal(recipes.length, legacyCategories.length);
     for (const [index, recipe] of recipes.entries()) {
+      assert.equal(recipe.ownerId, null);
       const oldCategory = legacyCategories[index];
       assert.deepEqual(
         recipe.categories,
@@ -181,7 +185,7 @@ test("migration preserves recipes and category membership through create and edi
         "migrate",
         "diff",
         "--from-url",
-        `file:${join(tempDir, "dev.db")}`,
+        `file:${join(tempDir, "local.db")}`,
         "--to-schema-datamodel",
         schemaPath,
         "--exit-code",

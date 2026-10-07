@@ -1,33 +1,40 @@
-import { existsSync } from "fs";
-import { mkdir, writeFile } from "fs/promises";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { join } from "path";
+import { notFound, redirect } from "next/navigation";
 import EditRecipeForm from "@/components/EditRecipeForm";
 import { type Category, parseRecipeCategories } from "@/constants/categories";
 import type { FormErrorKey } from "@/lib/form-errors";
+import { canEditRecipe } from "@/lib/permissions";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/session";
+import { saveRecipeImage } from "@/lib/upload";
 
 export default async function EditRecipePage(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
   const { id } = params;
+  const user = await getCurrentUser();
+  if (!user)
+    redirect(`/sign-in?next=${encodeURIComponent(`/recipes/${id}/edit`)}`);
 
   const recipe = await prisma.recipe.findUnique({
-    where: {
-      id: /^\d+$/.test(id) ? parseInt(id) : id,
-    } as any,
+    where: { id },
   });
 
   if (!recipe) {
     redirect("/");
   }
+  if (!canEditRecipe(user, recipe.ownerId)) notFound();
 
   async function updateRecipe(
     formData: FormData,
   ): Promise<FormErrorKey | null> {
     "use server";
+    const currentUser = await getCurrentUser();
+    if (!currentUser) return "error.signInRequired";
+    const currentRecipe = await prisma.recipe.findUnique({ where: { id } });
+    if (!currentRecipe || !canEditRecipe(currentUser, currentRecipe.ownerId))
+      return "error.forbidden";
 
     let categories: Category[];
     try {
@@ -47,16 +54,7 @@ export default async function EditRecipePage(props: {
 
     if (imageFile && imageFile.size > 0) {
       try {
-        const buffer = Buffer.from(await imageFile.arrayBuffer());
-        const uploadDir = join(process.cwd(), "public/uploads");
-
-        if (!existsSync(uploadDir)) {
-          await mkdir(uploadDir, { recursive: true });
-        }
-
-        const filename = `${Date.now()}-${imageFile.name.replace(/\s/g, "_")}`;
-        await writeFile(join(uploadDir, filename), buffer);
-        imageUrl = `/uploads/${filename}`;
+        imageUrl = await saveRecipeImage(imageFile);
       } catch (error) {
         console.error("Error updating recipe image:", error);
         return "error.uploadImage";
@@ -69,7 +67,7 @@ export default async function EditRecipePage(props: {
     const data = {
       title,
       description: formData.get("description") as string,
-      cookMinutes: rawCookMinutes ? parseInt(rawCookMinutes) : null,
+      cookMinutes: rawCookMinutes ? parseInt(rawCookMinutes, 10) : null,
       categories,
       ingredients,
       steps,
@@ -79,9 +77,7 @@ export default async function EditRecipePage(props: {
 
     try {
       await prisma.recipe.update({
-        where: {
-          id: /^\d+$/.test(id) ? parseInt(id) : id,
-        } as any,
+        where: { id },
         data,
       });
     } catch (error) {

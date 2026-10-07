@@ -40,3 +40,6 @@ next-env.d.ts
 
 # User-uploaded content
 /public/uploads
+
+# Runtime accounts, sessions and personal notes; dev.db is the legacy recipe snapshot.
+/prisma/local.db*

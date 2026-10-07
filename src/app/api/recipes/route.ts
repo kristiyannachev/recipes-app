@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { type Category, parseRecipeCategories } from "@/constants/categories";
 import { prisma } from "@/lib/prisma";
+import { isTrustedMutation } from "@/lib/request-security";
+import { getCurrentUser } from "@/lib/session";
 
 export async function GET() {
   const recipes = await prisma.recipe.findMany({
@@ -13,6 +15,14 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  if (!isTrustedMutation(req))
+    return NextResponse.json({ errorCode: "error.forbidden" }, { status: 403 });
+  const user = await getCurrentUser();
+  if (!user)
+    return NextResponse.json(
+      { errorCode: "error.signInRequired" },
+      { status: 401 },
+    );
   try {
     const body = await req.json();
     const {
@@ -51,6 +61,7 @@ export async function POST(req: Request) {
 
     const recipe = await prisma.recipe.create({
       data: {
+        ownerId: user.id,
         title,
         description: description ?? null,
         ingredients,

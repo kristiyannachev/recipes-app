@@ -5,16 +5,20 @@ import { useState } from "react";
 import RecipeCard from "@/components/RecipeCard";
 import { getRecipeCategories } from "@/constants/categories";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUser } from "@/contexts/UserContext";
 import CategoryFilter from "./CategoryFilter";
 
 interface RecipeListProps {
   recipes: Recipe[];
+  favoriteIds: string[];
 }
 
-export default function RecipeList({ recipes }: RecipeListProps) {
+export default function RecipeList({ recipes, favoriteIds }: RecipeListProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const { t } = useLanguage();
+  const user = useUser();
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
 
   const filteredRecipes = recipes.filter((recipe) => {
     const matchesCategory =
@@ -23,7 +27,11 @@ export default function RecipeList({ recipes }: RecipeListProps) {
     const matchesSearch = recipe.title
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return (
+      matchesCategory &&
+      matchesSearch &&
+      (!user || !favoritesOnly || favoriteIds.includes(recipe.id))
+    );
   });
 
   return (
@@ -38,6 +46,17 @@ export default function RecipeList({ recipes }: RecipeListProps) {
           className="w-full p-4 border border-stone-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-orange-200 outline-none transition-all bg-white text-lg"
         />
       </div>
+
+      {user && (
+        <label className="flex items-center gap-2 mb-5 text-emerald-700 font-bold">
+          <input
+            type="checkbox"
+            checked={favoritesOnly}
+            onChange={(event) => setFavoritesOnly(event.target.checked)}
+          />
+          {t("personal.onlyFavorites")}
+        </label>
+      )}
 
       <CategoryFilter
         selectedCategory={selectedCategory}

@@ -1,4 +1,5 @@
 import { execFileSync, spawn } from "node:child_process";
+import { randomBytes } from "node:crypto";
 import {
   cpSync,
   existsSync,
@@ -9,6 +10,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
+import { adminCredentials } from "./auth-credentials.mjs";
 
 const projectDir = resolve(".");
 const tempDir = mkdtempSync(join(tmpdir(), "recipes-e2e-"));
@@ -20,7 +22,12 @@ const nextCli = join(projectDir, "node_modules/next/dist/bin/next");
 const prismaCli = join(projectDir, "node_modules/prisma/build/index.js");
 const env = {
   ...process.env,
-  RECIPES_DATABASE_URL: `file:${join(tempDir, "dev.db")}`,
+  BETTER_AUTH_SECRET: randomBytes(32).toString("hex"),
+  BETTER_AUTH_URL: `http://127.0.0.1:${process.env.RECIPES_TEST_PORT ?? "3100"}`,
+  RECIPES_ADMIN_NAME: adminCredentials.name,
+  RECIPES_ADMIN_EMAIL: adminCredentials.email,
+  RECIPES_ADMIN_PASSWORD: adminCredentials.password,
+  RECIPES_DATABASE_URL: `file:${join(tempDir, "local.db")}`,
   RECIPES_NEXT_DIST_DIR: ".next-e2e",
   RECIPES_TSCONFIG_PATH: "tsconfig.e2e.json",
 };
@@ -48,7 +55,7 @@ try {
   cpSync(join(projectDir, "prisma/migrations"), join(tempDir, "migrations"), {
     recursive: true,
   });
-  writeFileSync(join(tempDir, "dev.db"), "");
+  writeFileSync(join(tempDir, "local.db"), "");
   execFileSync(
     process.execPath,
     [
@@ -59,6 +66,14 @@ try {
       join(tempDir, "schema.prisma"),
     ],
     { stdio: "inherit" },
+  );
+  execFileSync(
+    process.execPath,
+    [
+      join(projectDir, "node_modules/tsx/dist/cli.mjs"),
+      "scripts/create-admin.ts",
+    ],
+    { env, stdio: "inherit" },
   );
   execFileSync(process.execPath, [nextCli, "build"], { env, stdio: "inherit" });
   server = spawn(

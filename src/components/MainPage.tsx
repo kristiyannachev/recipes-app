@@ -5,7 +5,13 @@ import Link from "next/link";
 import RecipeList from "@/components/RecipeList";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-export default function MainPage({ recipes }: { recipes: Recipe[] }) {
+export default function MainPage({
+  recipes,
+  favoriteIds,
+}: {
+  recipes: Recipe[];
+  favoriteIds: string[];
+}) {
   const { t } = useLanguage();
 
   return (
@@ -23,7 +29,7 @@ export default function MainPage({ recipes }: { recipes: Recipe[] }) {
       </div>
 
       {recipes.length > 0 ? (
-        <RecipeList recipes={recipes} />
+        <RecipeList recipes={recipes} favoriteIds={favoriteIds} />
       ) : (
         <p className="text-gray-500 text-center py-10">{t("home.noRecipes")}</p>
       )}
