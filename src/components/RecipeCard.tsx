@@ -28,31 +28,38 @@ export default function RecipeCard({ recipe }: { recipe: RecipeListItem }) {
       </div>
       <div className="p-5 bg-orange-400 flex flex-col flex-grow">
         <h2
-          className="font-bold text-lg text-white truncate group-hover:text-emerald-600 transition-colors"
+          className="font-bold text-lg text-white line-clamp-3 break-words group-hover:text-emerald-600 transition-colors"
           title={recipe.title}
         >
           {recipe.title}
         </h2>
-        {recipe.owner && (
-          <p className="mt-1 text-xs text-white break-words">
-            {t("recipe.introducedBy")}: {recipe.owner.name}
+        {recipe.description && (
+          <p className="mt-2 text-sm text-white line-clamp-2 break-words">
+            {recipe.description}
           </p>
         )}
-        <div className="flex-grow mt-2">
-          <div className="flex justify-between items-start">
-            <p className="text-sm text-white line-clamp-2 pr-2">
-              {recipe.description || ""}
-            </p>
+        {(recipe.owner || !!recipe.cookMinutes) && (
+          <div className="mt-3 flex items-center justify-between gap-3 text-sm text-white">
+            {recipe.owner && (
+              <p className="flex min-w-0 items-center gap-1.5">
+                <span aria-hidden="true" className="shrink-0">
+                  🧑‍🍳
+                </span>
+                <span className="min-w-0 truncate" title={recipe.owner.name}>
+                  {recipe.owner.name}
+                </span>
+              </p>
+            )}
             {!!recipe.cookMinutes && (
               <CookTime
                 minutes={recipe.cookMinutes}
                 label={t("recipe.minutes")}
-                className="flex-shrink-0 flex items-center gap-1 text-sm font-medium text-white"
+                className="ml-auto shrink-0 flex items-center gap-1 text-sm font-medium text-white"
                 iconClassName="h-4 w-4 text-white"
               />
             )}
           </div>
-        </div>
+        )}
         {categories.length > 0 && (
           <div className="mt-auto pt-3">
             <RecipeCategoryBadges categories={categories} />
